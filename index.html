@@ -7,13 +7,14 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Chauchera">
 <title>Chauchera</title>
+<link href="https://api.fontshare.com/v2/css?f[]=satoshi@300,400,500,700,800,900&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-:root{--bg:#09090B;--s1:#111113;--s2:#18181B;--s3:#222226;--s4:#2A2A30;--border:#2E2E35;--orange:#FF6B2B;--orange2:#FF8C42;--yellow:#FFD166;--green:#06D6A0;--red:#EF476F;--blue:#4CC9F0;--purple:#7B6FFF;--text:#FAFAFA;--text2:#A0A0B0;--text3:#55555F;--text4:#333338;--r:16px;--r-sm:10px;--r-lg:24px;--safe-t:env(safe-area-inset-top,0px);--safe-b:env(safe-area-inset-bottom,0px);--nav-h:68px;}
+:root{--bg:#08080A;--s1:#101012;--s2:#161618;--s3:#1F1F22;--s4:#2A2A30;--border:#242428;--orange:#FF6B2B;--orange2:#FF8C42;--yellow:#FFD166;--green:#06D6A0;--red:#EF476F;--blue:#5B6CD6;--indigo:#5B6CD6;--purple:#7C5CFC;--text:#FAFAFA;--text2:#A0A0B0;--text3:#55555F;--text4:#333338;--r:16px;--r-sm:10px;--r-lg:24px;--safe-t:env(safe-area-inset-top,0px);--safe-b:env(safe-area-inset-bottom,0px);--nav-h:68px;}
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
-html,body{font-family:'Poppins',-apple-system,sans-serif;background:var(--bg);color:var(--text);height:100%;-webkit-font-smoothing:antialiased;}
+html,body{font-family:'Satoshi',-apple-system,sans-serif;background:var(--bg);color:var(--text);height:100%;-webkit-font-smoothing:antialiased;}
 .desktop{display:none;height:100vh;overflow:hidden;}
 .ds-sidebar{width:240px;flex-shrink:0;background:var(--s1);border-right:1px solid var(--border);display:flex;flex-direction:column;height:100vh;overflow-y:auto;}
 .ds-main{flex:1;display:flex;flex-direction:column;min-width:0;overflow:hidden;}
@@ -82,13 +83,13 @@ html,body{font-family:'Poppins',-apple-system,sans-serif;background:var(--bg);co
 .acc-card{background:var(--s2);border-radius:var(--r);padding:12px 14px;border:1px solid var(--border);display:flex;align-items:center;gap:10px;}
 .acc-ico{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;}
 .meta-card{background:var(--s2);border-radius:var(--r);padding:14px;border:1px solid var(--border);margin:0 20px 10px;cursor:pointer;transition:border-color .15s;}.meta-card:active{border-color:var(--orange);}
-.meta-track{height:4px;background:var(--border);border-radius:2px;overflow:hidden;}.meta-bar{height:100%;border-radius:2px;transition:width .8s ease;}
+.meta-track{height:6px;background:var(--s3);border-radius:3px;overflow:hidden;}.meta-bar{height:100%;border-radius:3px;transition:width .8s ease;background:linear-gradient(90deg,var(--orange),var(--purple))!important;}
 .field-lbl{font-size:9px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.8px;margin-bottom:5px;}
-.field-inp{width:100%;background:var(--s2);border:1px solid var(--border);border-radius:var(--r-sm);padding:12px 13px;color:var(--text);font-size:13px;font-family:'Poppins',sans-serif;font-weight:500;transition:border-color .15s;}
+.field-inp{width:100%;background:var(--s2);border:1px solid var(--border);border-radius:var(--r-sm);padding:12px 13px;color:var(--text);font-size:13px;font-family:'Satoshi',sans-serif;font-weight:500;transition:border-color .15s;}
 .field-inp:focus{outline:none;border-color:var(--orange);}.field-inp::placeholder{color:var(--text4);}
 .field-row2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
 .type-row{display:flex;gap:8px;}
-.type-btn{flex:1;padding:11px;border-radius:var(--r-sm);border:1px solid var(--border);background:var(--s2);color:var(--text2);font-size:11px;font-weight:600;font-family:'Poppins',sans-serif;cursor:pointer;transition:all .15s;text-align:center;}
+.type-btn{flex:1;padding:11px;border-radius:var(--r-sm);border:1px solid var(--border);background:var(--s2);color:var(--text2);font-size:11px;font-weight:600;font-family:'Satoshi',sans-serif;cursor:pointer;transition:all .15s;text-align:center;}
 .type-btn.t-exp{background:rgba(239,71,111,.12);color:var(--red);border-color:rgba(239,71,111,.25);}
 .type-btn.t-inc{background:rgba(6,214,160,.12);color:var(--green);border-color:rgba(6,214,160,.25);}
 .cat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;}
@@ -99,19 +100,19 @@ html,body{font-family:'Poppins',-apple-system,sans-serif;background:var(--bg);co
 .toggle input{opacity:0;width:0;height:0;position:absolute;}
 .toggle-track{position:absolute;inset:0;background:var(--s4);border-radius:11px;transition:background .2s;}.toggle input:checked+.toggle-track{background:var(--orange);}
 .toggle-thumb{position:absolute;top:3px;left:3px;width:16px;height:16px;border-radius:50%;background:#fff;transition:transform .2s;}.toggle input:checked~.toggle-thumb{transform:translateX(18px);}
-.save-btn{width:100%;padding:14px;border-radius:var(--r);border:none;background:linear-gradient(135deg,var(--orange),var(--orange2));color:#fff;font-size:14px;font-weight:700;font-family:'Poppins',sans-serif;cursor:pointer;box-shadow:0 6px 20px rgba(255,107,43,.3);transition:opacity .15s;}.save-btn:active{opacity:.85;}
+.save-btn{width:100%;padding:14px;border-radius:var(--r);border:none;background:linear-gradient(135deg,var(--orange),var(--orange2));color:#fff;font-size:14px;font-weight:700;font-family:'Satoshi',sans-serif;cursor:pointer;box-shadow:0 6px 20px rgba(255,107,43,.3);transition:opacity .15s;}.save-btn:active{opacity:.85;}
 .add-amt{background:linear-gradient(135deg,#1C1000,#2D1900);border-radius:var(--r-lg);padding:20px;text-align:center;border:1px solid rgba(255,107,43,.15);}
 .add-amt-lbl{font-size:9px;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:1px;margin-bottom:5px;}
 .add-amt-val{font-size:34px;font-weight:800;background:linear-gradient(135deg,#FFF,var(--yellow));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:-1px;}
 .month-tabs{display:flex;gap:6px;padding:10px 20px 0;overflow-x:auto;scrollbar-width:none;}.month-tabs::-webkit-scrollbar{display:none;}
-.month-tab{padding:5px 12px;border-radius:20px;font-size:10px;font-weight:600;font-family:'Poppins',sans-serif;cursor:pointer;white-space:nowrap;background:var(--s2);color:var(--text2);border:1px solid var(--border);transition:all .15s;flex-shrink:0;}.month-tab.on{background:var(--orange);color:#fff;border-color:var(--orange);}
+.month-tab{padding:5px 12px;border-radius:20px;font-size:10px;font-weight:600;font-family:'Satoshi',sans-serif;cursor:pointer;white-space:nowrap;background:var(--s2);color:var(--text2);border:1px solid var(--border);transition:all .15s;flex-shrink:0;}.month-tab.on{background:var(--orange);color:#fff;border-color:var(--orange);}
 .sub-card{display:flex;align-items:center;gap:10px;padding:11px 20px;border-bottom:1px solid var(--border);}.sub-card:last-child{border-bottom:none;}
 .sub-ico{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;background:var(--s3);border:1px solid var(--border);flex-shrink:0;}
 .ai-box{background:var(--s2);border-radius:var(--r);overflow:hidden;border:1px solid var(--border);}
-.ai-ta{width:100%;background:transparent;border:none;padding:13px;color:var(--text);font-size:12px;font-family:'Poppins',sans-serif;resize:none;height:72px;line-height:1.6;}.ai-ta:focus{outline:none;}.ai-ta::placeholder{color:var(--text3);}
+.ai-ta{width:100%;background:transparent;border:none;padding:13px;color:var(--text);font-size:12px;font-family:'Satoshi',sans-serif;resize:none;height:72px;line-height:1.6;}.ai-ta:focus{outline:none;}.ai-ta::placeholder{color:var(--text3);}
 .ai-divider{height:1px;background:var(--border);}
 .ai-acts{display:flex;gap:6px;padding:8px 12px;overflow-x:auto;scrollbar-width:none;}.ai-acts::-webkit-scrollbar{display:none;}
-.ai-chip{padding:6px 12px;border-radius:20px;border:1px solid var(--border);background:var(--s3);color:var(--text2);font-size:10px;font-weight:600;font-family:'Poppins',sans-serif;cursor:pointer;white-space:nowrap;transition:all .12s;flex-shrink:0;}.ai-chip:active{background:var(--orange);color:#fff;border-color:var(--orange);}
+.ai-chip{padding:6px 12px;border-radius:20px;border:1px solid var(--border);background:var(--s3);color:var(--text2);font-size:10px;font-weight:600;font-family:'Satoshi',sans-serif;cursor:pointer;white-space:nowrap;transition:all .12s;flex-shrink:0;}.ai-chip:active{background:var(--orange);color:#fff;border-color:var(--orange);}
 .ai-chip.primary{background:linear-gradient(135deg,var(--orange),var(--orange2));color:#fff;border-color:transparent;}
 .ai-resp{background:var(--s2);border-radius:var(--r);padding:13px;border:1px solid var(--border);display:none;}.ai-resp.on{display:block;}
 .ai-resp-hdr{display:flex;align-items:center;gap:6px;margin-bottom:7px;}
@@ -156,6 +157,9 @@ html,body{font-family:'Poppins',-apple-system,sans-serif;background:var(--bg);co
 .mh-donut{display:flex;align-items:center;gap:14px;margin:0 20px;background:var(--s1);border:1px solid var(--border);border-radius:18px;padding:15px;}
 .mh-donut-c{width:112px;height:112px;flex-shrink:0;position:relative;}
 .mh-donut-c canvas{width:100%!important;height:100%!important;}
+.donut-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;pointer-events:none;}
+.donut-center-val{font-size:15px;font-weight:800;letter-spacing:-.4px;}
+.donut-center-lbl{font-size:8px;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;margin-top:1px;}
 .mh-donut-leg{flex:1;min-width:0;display:flex;flex-direction:column;gap:7px;}
 .leg-item{display:flex;align-items:center;gap:8px;}
 .leg-dot{width:9px;height:9px;border-radius:3px;flex-shrink:0;}
@@ -163,11 +167,11 @@ html,body{font-family:'Poppins',-apple-system,sans-serif;background:var(--bg);co
 .leg-val{font-size:11px;font-weight:700;color:var(--text2);flex-shrink:0;}
 .mh-search{margin:0 20px;position:relative;}
 .mh-search svg{position:absolute;left:13px;top:50%;transform:translateY(-50%);width:16px;height:16px;color:var(--text3);pointer-events:none;}
-.mh-search input{width:100%;background:var(--s1);border:1px solid var(--border);border-radius:13px;padding:12px 13px 12px 38px;color:var(--text);font-size:13px;font-family:'Poppins',sans-serif;font-weight:500;transition:border-color .15s;}
+.mh-search input{width:100%;background:var(--s1);border:1px solid var(--border);border-radius:13px;padding:12px 13px 12px 38px;color:var(--text);font-size:13px;font-family:'Satoshi',sans-serif;font-weight:500;transition:border-color .15s;}
 .mh-search input:focus{outline:none;border-color:var(--orange);}
 .mh-search input::placeholder{color:var(--text4);}
 .cur-seg-wrap{display:inline-flex;gap:2px;margin-top:12px;background:var(--s2);border:1px solid var(--border);border-radius:11px;padding:3px;}
-.cur-seg{padding:5px 15px;border-radius:8px;font-size:11px;font-weight:700;font-family:'Poppins',sans-serif;color:var(--text2);background:transparent;border:none;cursor:pointer;transition:all .15s;}
+.cur-seg{padding:5px 15px;border-radius:8px;font-size:11px;font-weight:700;font-family:'Satoshi',sans-serif;color:var(--text2);background:transparent;border:none;cursor:pointer;transition:all .15s;}
 .cur-seg.on{background:linear-gradient(135deg,var(--orange),var(--orange2));color:#fff;}
 .cur-rate{font-size:9px;color:var(--text3);margin-top:7px;min-height:11px;}
 .mh-sum{margin:16px 20px 0;background:var(--s1);border:1px solid var(--border);border-radius:18px;padding:15px;}
@@ -216,7 +220,7 @@ html,body{font-family:'Poppins',-apple-system,sans-serif;background:var(--bg);co
   <div class="ds-foot"><div class="sync-row"><div class="sync-dot" id="syncDot"></div><span id="syncLbl">Conectando...</span></div><div class="sync-time" id="syncTime"></div></div>
 </nav>
 <div class="ds-main">
-  <div class="ds-topbar"><div><h1 id="dsPgTitle">Dashboard</h1><p id="dsPgSub">Resumen · Julio 2026</p></div><div style="display:flex;gap:8px;align-items:center"><span id="dsConn" style="font-size:10px;color:var(--text3)">●</span><button onclick="dsGo('add',null)" style="padding:7px 14px;border-radius:8px;border:none;background:var(--orange);color:#fff;font-size:11px;font-weight:700;font-family:'Poppins',sans-serif;cursor:pointer">＋ Nuevo</button></div></div>
+  <div class="ds-topbar"><div><h1 id="dsPgTitle">Dashboard</h1><p id="dsPgSub">Resumen · Julio 2026</p></div><div style="display:flex;gap:8px;align-items:center"><span id="dsConn" style="font-size:10px;color:var(--text3)">●</span><button onclick="dsGo('add',null)" style="padding:7px 14px;border-radius:8px;border:none;background:var(--orange);color:#fff;font-size:11px;font-weight:700;font-family:'Satoshi',sans-serif;cursor:pointer">＋ Nuevo</button></div></div>
   <div class="ds-scroll">
     <div class="view on" id="ds-home">
       <div class="cards-grid" id="dsCards"><div class="loading"><div class="spin"></div>Cargando...</div></div>
@@ -238,7 +242,7 @@ html,body{font-family:'Poppins',-apple-system,sans-serif;background:var(--bg);co
         <div class="panel"><div class="panel-hdr"><div class="panel-title">Deudas activas</div></div>
           <div style="display:flex;flex-direction:column">
             <div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border)"><div><div style="font-size:12px;font-weight:600">👨‍👦 Deuda papá</div><div style="font-size:10px;color:var(--text2);margin-top:1px">$500K/mes · 7 cuotas</div></div><div style="font-size:13px;font-weight:700;color:var(--red)">$3.500.000</div></div>
-            <div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border)"><div><div style="font-size:12px;font-weight:600">✈️ Vuelo China (José)</div><div style="font-size:10px;color:var(--text2);margin-top:1px">Casi liquidada</div></div><div style="font-size:13px;font-weight:700;color:var(--yellow)">$145.048</div></div>
+            <div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border)"><div><div style="font-size:12px;font-weight:600">✈️ Viaje China</div><div style="font-size:10px;color:var(--text2);margin-top:1px">Falta por pagar</div></div><div style="font-size:13px;font-weight:700;color:var(--red)">$1.656.049</div></div>
             <div style="display:flex;justify-content:space-between;padding:10px 0"><div><div style="font-size:12px;font-weight:600">🎒 Mochila Ofki 3/3</div><div style="font-size:10px;color:var(--text2);margin-top:1px">Última cuota julio</div></div><div style="font-size:13px;font-weight:700;color:var(--yellow)">~$95.583</div></div>
           </div>
           <div style="margin-top:14px"><div class="panel-title" style="margin-bottom:9px">Wishlist 🛍️</div>
@@ -260,7 +264,7 @@ html,body{font-family:'Poppins',-apple-system,sans-serif;background:var(--bg);co
           <div><div class="field-lbl">Descripción</div><input type="text" class="field-inp" id="dsDesc" placeholder="Café, editor, supermercado..."></div>
           <div><div class="field-lbl">Categoría</div><div class="cat-grid" id="dsCatGrid"></div></div>
           <div class="field-row2">
-            <div><div class="field-lbl">Cuenta</div><select class="field-inp" id="dsAcc" onchange="onAccChange('ds')"><option>Falabella</option><option>Mercado Pago</option><option>Tenpo</option><option>Truist</option><option>Santander España</option><option>Wise</option><option>Racional</option><option>—</option></select></div>
+            <div><div class="field-lbl">Cuenta</div><select class="field-inp" id="dsAcc" onchange="onAccChange('ds')"><option>Falabella</option><option>Mercado Pago</option><option>Tenpo</option><option>Tenpo TC</option><option>Santander Chile</option><option>Truist</option><option>Santander España</option><option>Wise</option><option>Racional</option><option>—</option></select></div>
             <div><div class="field-lbl">¿Fija?</div><label style="display:flex;align-items:center;gap:8px;padding:12px;background:var(--s2);border-radius:var(--r-sm);border:1px solid var(--border);cursor:pointer"><span style="font-size:11px;font-weight:500;flex:1">Suscripción fija</span><label class="toggle"><input type="checkbox" id="dsFixed"><div class="toggle-track"></div><div class="toggle-thumb"></div></label></label></div>
           </div>
           <button class="save-btn" id="dsSaveBtn" onclick="saveTx('ds')">Guardar transacción</button>
@@ -288,9 +292,10 @@ html,body{font-family:'Poppins',-apple-system,sans-serif;background:var(--bg);co
   <!-- HOME -->
   <div class="view on" id="mob-home">
     <div style="padding:14px 20px 0;display:flex;justify-content:space-between;align-items:center">
-      <div><div style="font-size:11px;color:var(--text2)">Bienvenido 👋</div><div style="font-size:18px;font-weight:800;margin-top:1px">Álvaro</div></div>
-      <div style="width:38px;height:38px;background:var(--s2);border-radius:11px;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:17px;position:relative">🔔<div style="width:6px;height:6px;background:var(--orange);border-radius:50%;position:absolute;top:7px;right:7px;border:2px solid var(--bg)"></div></div>
+      <div style="display:flex;align-items:center;gap:8px"><div style="width:26px;height:26px;border-radius:8px;background:linear-gradient(135deg,var(--orange),var(--purple));display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:900;font-style:italic;color:#fff">₡</div><span style="font-size:14px;font-weight:800;letter-spacing:-.2px">Chauchera</span></div>
+      <div style="width:36px;height:36px;background:var(--s2);border-radius:11px;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:16px;position:relative">🔔<div style="width:6px;height:6px;background:var(--orange);border-radius:50%;position:absolute;top:7px;right:7px;border:2px solid var(--bg)"></div></div>
     </div>
+    <div style="padding:12px 20px 0"><div style="font-size:21px;font-weight:800;letter-spacing:-.5px">Buenos días, Álvaro</div><div style="font-size:11px;color:var(--text2);margin-top:2px">Tu dinero en todas tus cuentas · act. recién</div></div>
     <!-- HERO BALANCE -->
     <div class="mh-hero"><div class="mh-hero-lbl">Patrimonio total</div><div class="mh-bal" id="mobBal">—</div><div class="mh-bal-sub">Todas las cuentas · Julio 2026</div><div id="curSeg" class="cur-seg-wrap"><button class="cur-seg on" data-d="CLP" onclick="setDivisa('CLP')">CLP</button><button class="cur-seg" data-d="USD" onclick="setDivisa('USD')">USD</button><button class="cur-seg" data-d="EUR" onclick="setDivisa('EUR')">EUR</button></div><div class="cur-rate" id="curRateNote"></div></div>
     <!-- RESUMEN INGRESOS VS GASTOS -->
@@ -299,6 +304,9 @@ html,body{font-family:'Poppins',-apple-system,sans-serif;background:var(--bg);co
       <div class="mh-sum-bar"><div class="bar-inc" id="mobBarInc" style="width:50%"></div><div class="bar-exp" id="mobBarExp" style="width:50%"></div></div>
       <div class="mh-sum-leg"><div><span class="dot dot-g"></span>Ingresos&nbsp;<b id="mobIng">—</b></div><div><span class="dot dot-r"></span>Gastos&nbsp;<b id="mobGas">—</b></div></div>
     </div>
+    <!-- FLUJO DE CAJA -->
+    <div class="sec-hdr"><span class="sec-title">Flujo de caja</span><span class="sec-link" style="cursor:default;color:var(--text3)">Ene–Jul 2026</span></div>
+    <div style="margin:0 20px;background:var(--s1);border:1px solid var(--border);border-radius:18px;padding:14px"><canvas id="mobBar" height="120"></canvas></div>
     <!-- ACCIONES -->
     <div class="mh-actions">
       <div class="mh-act" onclick="mobAdd('income')"><div class="mh-act-ico a-inc"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg></div><span class="mh-act-lbl">Ingreso</span></div>
@@ -314,7 +322,7 @@ html,body{font-family:'Poppins',-apple-system,sans-serif;background:var(--bg);co
     <div style="padding:0 20px" id="mobCartera"></div>
     <!-- CATEGORÍAS DONUT -->
     <div class="sec-hdr"><span class="sec-title">Gastos por categoría</span></div>
-    <div class="mh-donut"><div class="mh-donut-c"><canvas id="mobDonut"></canvas></div><div class="mh-donut-leg" id="mobDonutLeg"></div></div>
+    <div class="mh-donut"><div class="mh-donut-c"><canvas id="mobDonut"></canvas><div class="donut-center"><div class="donut-center-val" id="mobDonutTot">—</div><div class="donut-center-lbl">gastado</div></div></div><div class="mh-donut-leg" id="mobDonutLeg"></div></div>
     <!-- BUSCADOR + RECIENTES -->
     <div class="sec-hdr"><span class="sec-title">Recientes</span><span class="sec-link" onclick="mobGo('txns')">Ver todas →</span></div>
     <div class="mh-search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><input type="text" id="mobSearch" placeholder="Buscar transacción..." oninput="mobSearchTx(this.value)"></div>
@@ -324,7 +332,7 @@ html,body{font-family:'Poppins',-apple-system,sans-serif;background:var(--bg);co
   </div>
   <!-- TXNS -->
   <div class="view" id="mob-txns">
-    <div style="padding:16px 20px 0;display:flex;justify-content:space-between;align-items:center"><div style="font-size:19px;font-weight:800">Transacciones</div><button onclick="mobGo('add')" style="padding:6px 13px;border-radius:8px;border:none;background:var(--orange);color:#fff;font-size:10px;font-weight:700;font-family:'Poppins',sans-serif;cursor:pointer">＋ Nueva</button></div>
+    <div style="padding:16px 20px 0;display:flex;justify-content:space-between;align-items:center"><div style="font-size:19px;font-weight:800">Transacciones</div><button onclick="mobGo('add')" style="padding:6px 13px;border-radius:8px;border:none;background:var(--orange);color:#fff;font-size:10px;font-weight:700;font-family:'Satoshi',sans-serif;cursor:pointer">＋ Nueva</button></div>
     <div class="month-tabs"><div class="month-tab on" onclick="filterMonth(this,'07')">Julio</div><div class="month-tab" onclick="filterMonth(this,'06')">Junio</div><div class="month-tab" onclick="filterMonth(this,'all')">Todo</div></div>
     <div style="height:8px"></div>
     <div class="tx-list" id="mobTxFull"><div class="loading"><div class="spin"></div></div></div>
@@ -338,7 +346,7 @@ html,body{font-family:'Poppins',-apple-system,sans-serif;background:var(--bg);co
     <div class="sec-hdr"><span class="sec-title">Deudas activas</span></div>
     <div style="margin:0 20px;background:var(--s2);border-radius:var(--r);border:1px solid var(--border);overflow:hidden">
       <div style="display:flex;justify-content:space-between;padding:11px 15px;border-bottom:1px solid var(--border)"><div><div style="font-size:12px;font-weight:600">👨‍👦 Deuda papá</div><div style="font-size:10px;color:var(--text2);margin-top:1px">$500K/mes · 7 cuotas</div></div><div style="font-size:13px;font-weight:700;color:var(--red)">$3.500.000</div></div>
-      <div style="display:flex;justify-content:space-between;padding:11px 15px;border-bottom:1px solid var(--border)"><div><div style="font-size:12px;font-weight:600">✈️ Vuelo China (José)</div><div style="font-size:10px;color:var(--text2);margin-top:1px">Casi liquidada</div></div><div style="font-size:13px;font-weight:700;color:var(--yellow)">$145.048</div></div>
+      <div style="display:flex;justify-content:space-between;padding:11px 15px;border-bottom:1px solid var(--border)"><div><div style="font-size:12px;font-weight:600">✈️ Viaje China</div><div style="font-size:10px;color:var(--text2);margin-top:1px">Falta por pagar</div></div><div style="font-size:13px;font-weight:700;color:var(--red)">$1.656.049</div></div>
       <div style="display:flex;justify-content:space-between;padding:11px 15px"><div><div style="font-size:12px;font-weight:600">🎒 Mochila Ofki 3/3</div><div style="font-size:10px;color:var(--text2);margin-top:1px">Última cuota</div></div><div style="font-size:13px;font-weight:700;color:var(--yellow)">~$95.583</div></div>
     </div>
     <div style="height:8px"></div>
@@ -359,7 +367,7 @@ html,body{font-family:'Poppins',-apple-system,sans-serif;background:var(--bg);co
       <div><div class="field-lbl" id="mobAmtLbl">Monto CLP</div><input type="number" class="field-inp" id="mobAmt" placeholder="15000" inputmode="decimal" oninput="updateAmtDisp('mob')"><div style="font-size:9px;color:var(--text3);margin-top:4px" id="mobAmtHint"></div></div>
       <div><div class="field-lbl">Descripción</div><input type="text" class="field-inp" id="mobDesc" placeholder="Café, editor, supermercado..."></div>
       <div><div class="field-lbl">Categoría</div><div class="cat-grid" id="mobCatGrid"></div></div>
-      <div class="field-row2"><div><div class="field-lbl">Cuenta</div><select class="field-inp" id="mobAcc" onchange="onAccChange('mob')"><option>Falabella</option><option>Mercado Pago</option><option>Tenpo</option><option>Truist</option><option>Santander España</option><option>Wise</option><option>Racional</option><option>—</option></select></div><div><div class="field-lbl">Fecha</div><input type="date" class="field-inp" id="mobDate"></div></div>
+      <div class="field-row2"><div><div class="field-lbl">Cuenta</div><select class="field-inp" id="mobAcc" onchange="onAccChange('mob')"><option>Falabella</option><option>Mercado Pago</option><option>Tenpo</option><option>Tenpo TC</option><option>Santander Chile</option><option>Truist</option><option>Santander España</option><option>Wise</option><option>Racional</option><option>—</option></select></div><div><div class="field-lbl">Fecha</div><input type="date" class="field-inp" id="mobDate"></div></div>
       <label style="display:flex;align-items:center;gap:9px;padding:11px 13px;background:var(--s2);border-radius:var(--r-sm);border:1px solid var(--border);cursor:pointer"><span style="font-size:11px;font-weight:500;flex:1">🔄 Suscripción fija</span><label class="toggle"><input type="checkbox" id="mobFixed"><div class="toggle-track"></div><div class="toggle-thumb"></div></label></label>
       <button class="save-btn" id="mobSaveBtn" onclick="saveTx('mob')">Guardar transacción</button>
     </div>
@@ -429,11 +437,13 @@ const CATS=[
 
 // Cuentas: bal = saldo en su moneda nativa (cur). El patrimonio se calcula en CLP al cambio del día.
 const ACCS={
-  'Mercado Pago':{ico:'🟢',color:'#00A650',sub:'BICE 3.9% anual',cur:'CLP',bal:826822},
   'Racional':{ico:'📈',color:'#7B6FFF',sub:'ETFs + portafolios · +27%',cur:'CLP',bal:1035471,inv:true},
+  'Santander Chile':{ico:'🔴',color:'#EC0000',sub:'Cuenta Más Lucas',cur:'CLP',bal:301835},
+  'Mercado Pago':{ico:'🟢',color:'#00A650',sub:'BICE 3.9% anual',cur:'CLP',bal:88316},
+  'Tenpo TC':{ico:'💳',color:'#1DB954',sub:'Tarjeta de crédito',cur:'CLP',bal:75547},
+  'Falabella':{ico:'🏦',color:'#CC0000',sub:'Débito Digital',cur:'CLP',bal:53467},
   'Truist':{ico:'🏦',color:'#5B2A86',sub:'Checking USD · EE.UU.',cur:'USD',bal:419.98},
-  'Falabella':{ico:'🏦',color:'#CC0000',sub:'Cuenta corriente',cur:'CLP',bal:17716},
-  'Tenpo':{ico:'💚',color:'#1DB954',sub:'Vista + crédito',cur:'CLP',bal:5055},
+  'Tenpo':{ico:'💚',color:'#1DB954',sub:'Vista',cur:'CLP',bal:525},
   'Santander España':{ico:'🇪🇸',color:'#EC0000',sub:'Cuenta EUR · España',cur:'EUR',bal:0},
 };
 const accClp=a=>Math.round(a.bal*(RATES[a.cur]||1));
@@ -701,19 +711,22 @@ function initCharts(){
   const mn=['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
   const labels=s.map(m=>mn[parseInt(m.slice(5))-1]);
   const gc='#2E2E35',tc='#A0A0B0';
-  const opts={responsive:true,maintainAspectRatio:true,plugins:{legend:{labels:{color:tc,font:{size:9,family:'Poppins'},boxWidth:8,boxHeight:8}}},scales:{x:{grid:{color:gc},ticks:{color:tc,font:{size:9}}},y:{grid:{color:gc},ticks:{color:tc,font:{size:9},callback:v=>'$'+(v>=1e6?(v/1e6).toFixed(1)+'M':(v/1e3).toFixed(0)+'K')}}}};
+  const opts={responsive:true,maintainAspectRatio:true,plugins:{legend:{labels:{color:tc,font:{size:9,family:'Satoshi'},boxWidth:8,boxHeight:8}}},scales:{x:{grid:{color:gc},ticks:{color:tc,font:{size:9}}},y:{grid:{color:gc},ticks:{color:tc,font:{size:9},callback:v=>'$'+(v>=1e6?(v/1e6).toFixed(1)+'M':(v/1e3).toFixed(0)+'K')}}}};
   if(barDs)barDs.destroy();const de=document.getElementById('dsBar');
   if(de)barDs=new Chart(de,{type:'bar',data:{labels,datasets:[{label:'Ingresos',data:s.map(m=>mos[m].i),backgroundColor:'rgba(6,214,160,.75)',borderRadius:4,borderSkipped:false},{label:'Gastos',data:s.map(m=>mos[m].g),backgroundColor:'rgba(255,107,43,.75)',borderRadius:4,borderSkipped:false}]},options:opts});
   if(barM)barM.destroy();const me=document.getElementById('mobBar');
-  if(me)barM=new Chart(me,{type:'bar',data:{labels,datasets:[{label:'Ingresos',data:s.map(m=>mos[m].i),backgroundColor:'rgba(6,214,160,.75)',borderRadius:3,borderSkipped:false},{label:'Gastos',data:s.map(m=>mos[m].g),backgroundColor:'rgba(255,107,43,.75)',borderRadius:3,borderSkipped:false}]},options:{...opts,plugins:{legend:{display:false}}}});
+  const optM={responsive:true,maintainAspectRatio:true,plugins:{legend:{align:'start',labels:{color:tc,font:{size:9,family:'Satoshi'},boxWidth:8,boxHeight:8,padding:10,usePointStyle:true,pointStyle:'circle'}}},scales:{x:{grid:{display:false},ticks:{color:tc,font:{size:9}}},y:{grid:{color:'rgba(255,255,255,.04)'},border:{display:false},ticks:{color:'var(--text3)',font:{size:8},callback:v=>'$'+(v>=1e6?(v/1e6).toFixed(1)+'M':(v/1e3).toFixed(0)+'K')}}}};
+  if(me)barM=new Chart(me,{type:'bar',data:{labels,datasets:[{label:'Ingresos',data:s.map(m=>mos[m].i),backgroundColor:'rgba(255,107,43,.9)',borderRadius:5,borderSkipped:false},{label:'Gastos',data:s.map(m=>mos[m].g),backgroundColor:'rgba(124,92,252,.9)',borderRadius:5,borderSkipped:false}]},options:optM});
   const cats={};TXS.filter(t=>t.tipo==='expense').forEach(t=>{cats[t.categoria]=(cats[t.categoria]||0)+t.monto;});
   const ce=Object.entries(cats).sort((a,b)=>b[1]-a[1]).slice(0,7);
   if(donutDs)donutDs.destroy();const doe=document.getElementById('dsDonut');
-  if(doe)donutDs=new Chart(doe,{type:'doughnut',data:{labels:ce.map(c=>c[0]),datasets:[{data:ce.map(c=>c[1]),backgroundColor:ce.map(c=>ci(c[0]).color),borderWidth:0,hoverOffset:4}]},options:{cutout:'62%',responsive:true,maintainAspectRatio:true,plugins:{legend:{position:'bottom',labels:{color:tc,font:{size:9,family:'Poppins'},boxWidth:7,boxHeight:7,padding:6}}}}});
+  if(doe)donutDs=new Chart(doe,{type:'doughnut',data:{labels:ce.map(c=>c[0]),datasets:[{data:ce.map(c=>c[1]),backgroundColor:ce.map(c=>ci(c[0]).color),borderWidth:0,hoverOffset:4}]},options:{cutout:'62%',responsive:true,maintainAspectRatio:true,plugins:{legend:{position:'bottom',labels:{color:tc,font:{size:9,family:'Satoshi'},boxWidth:7,boxHeight:7,padding:6}}}}});
   if(donutM)donutM.destroy();const dme=document.getElementById('mobDonut');
   if(dme)donutM=new Chart(dme,{type:'doughnut',data:{labels:ce.map(c=>c[0]),datasets:[{data:ce.map(c=>c[1]),backgroundColor:ce.map(c=>ci(c[0]).color),borderWidth:0,hoverOffset:3}]},options:{cutout:'64%',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}}}});
   const leg=document.getElementById('mobDonutLeg');
   if(leg)leg.innerHTML=ce.slice(0,6).map(c=>`<div class="leg-item"><div class="leg-dot" style="background:${ci(c[0]).color}"></div><div class="leg-name">${c[0]}</div><div class="leg-val">${fmtK(c[1])}</div></div>`).join('')||'<div style="font-size:11px;color:var(--text2)">Sin datos aún</div>';
+  const totCat=Object.values(cats).reduce((s2,v)=>s2+v,0);
+  const dt=document.getElementById('mobDonutTot');if(dt)dt.textContent=fmtK(totCat);
 }
 
 function setType(t,px){
@@ -778,7 +791,7 @@ function buildQuickBtns(){
   });
 }
 
-const SYS=`Eres el asesor financiero personal de Álvaro Valenzuela, fundador de Void Studio (Santiago, Chile). Responde directo, sin relleno, en español. Montos en CLP siempre. Contexto julio 2026: Ingresos ~$2.55M CLP/mes. Deuda papá $3.5M ($500K/mes). Vuelo China pendiente $145K. Metas: Casa Paine $20M, China $2.7M (79%), Editor $1.2M, Salud $360K.`;
+const SYS=`Eres el asesor financiero personal de Álvaro Valenzuela, fundador de Void Studio (Santiago, Chile). Responde directo, sin relleno, en español. Montos en CLP siempre. Contexto julio 2026: Ingresos ~$2.55M CLP/mes. Deuda papá $3.5M ($500K/mes). Deuda viaje China pendiente $1.66M. Metas: Casa Paine $20M, China $3M (72%), Editor $1.2M, Salud $360K.`;
 
 async function callClaude(msg){const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:1000,system:SYS,messages:[{role:'user',content:msg}]})});const d=await r.json();return d.content?.[0]?.text||'Sin respuesta.';}
 
