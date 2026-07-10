@@ -213,6 +213,9 @@ html,body{font-family:'Satoshi',-apple-system,sans-serif;background:var(--bg);co
 .pf-val{font-size:16px;font-weight:800;letter-spacing:-.4px;}
 .pf-sub{font-size:9px;color:var(--text3);margin-top:1px;}
 .pf-chg{display:inline-flex;align-items:center;gap:3px;font-size:10px;font-weight:700;color:var(--green);background:rgba(6,214,160,.12);padding:3px 8px;border-radius:8px;margin-top:8px;}
+.e3{width:1.25em;height:1.25em;vertical-align:-0.28em;object-fit:contain;display:inline-block;}
+.mob-nav-ico .e3{width:24px;height:24px;vertical-align:middle;}
+.cat-chip-ico .e3{width:22px;height:22px;vertical-align:middle;}
 @media(min-width:769px){.desktop{display:flex;}.mobile{display:none!important;}.toast{bottom:20px;}}
 @media(max-width:768px){.desktop{display:none!important;}.mobile{display:flex;}.cards-grid{grid-template-columns:1fr 1fr;gap:9px;}.card{padding:13px;}.card-val{font-size:16px;}.row2,.row2b{grid-template-columns:1fr;}}
 </style>
@@ -273,6 +276,7 @@ html,body{font-family:'Satoshi',-apple-system,sans-serif;background:var(--bg);co
         <div class="panel-hdr"><div class="panel-title">Nueva transacción</div></div>
         <div style="display:flex;flex-direction:column;gap:12px">
           <div><div class="field-lbl">Tipo</div><div class="type-row" id="dsTypeRow"><button class="type-btn t-exp" onclick="setType('expense','ds')">💸 Gasto</button><button class="type-btn" onclick="setType('income','ds')">💰 Ingreso</button></div></div>
+          <div><div class="field-lbl">Divisa</div><div id="dsAddDiv" class="cur-seg-wrap" style="margin-top:0;display:flex"><button class="cur-seg on" data-d="CLP" style="flex:1" onclick="setAddDiv('ds','CLP')">CLP</button><button class="cur-seg" data-d="USD" style="flex:1" onclick="setAddDiv('ds','USD')">USD</button><button class="cur-seg" data-d="EUR" style="flex:1" onclick="setAddDiv('ds','EUR')">EUR</button></div></div>
           <div class="field-row2"><div><div class="field-lbl" id="dsAmtLbl">Monto CLP</div><input type="number" class="field-inp" id="dsAmt" placeholder="15000" oninput="updateAmtDisp('ds')"><div style="font-size:9px;color:var(--text3);margin-top:4px" id="dsAmtHint"></div></div><div><div class="field-lbl">Fecha</div><input type="date" class="field-inp" id="dsDate"></div></div>
           <div><div class="field-lbl">Descripción</div><input type="text" class="field-inp" id="dsDesc" placeholder="Café, editor, supermercado..."></div>
           <div><div class="field-lbl">Categoría</div><div class="cat-grid" id="dsCatGrid"></div></div>
@@ -371,6 +375,7 @@ html,body{font-family:'Satoshi',-apple-system,sans-serif;background:var(--bg);co
     <div style="padding:13px 20px 0;display:flex;flex-direction:column;gap:12px">
       <div class="add-amt"><div class="add-amt-lbl">Monto</div><div class="add-amt-val" id="mobAmtDisp">$0</div></div>
       <div><div class="field-lbl">Tipo</div><div class="type-row" id="mobTypeRow"><button class="type-btn t-exp" onclick="setType('expense','mob')">💸 Gasto</button><button class="type-btn" onclick="setType('income','mob')">💰 Ingreso</button></div></div>
+      <div><div class="field-lbl">Divisa</div><div id="mobAddDiv" class="cur-seg-wrap" style="margin-top:0;display:flex;width:100%"><button class="cur-seg on" data-d="CLP" style="flex:1" onclick="setAddDiv('mob','CLP')">CLP</button><button class="cur-seg" data-d="USD" style="flex:1" onclick="setAddDiv('mob','USD')">USD</button><button class="cur-seg" data-d="EUR" style="flex:1" onclick="setAddDiv('mob','EUR')">EUR</button></div></div>
       <div><div class="field-lbl" id="mobAmtLbl">Monto CLP</div><input type="number" class="field-inp" id="mobAmt" placeholder="15000" inputmode="decimal" oninput="updateAmtDisp('mob')"><div style="font-size:9px;color:var(--text3);margin-top:4px" id="mobAmtHint"></div></div>
       <div><div class="field-lbl">Descripción</div><input type="text" class="field-inp" id="mobDesc" placeholder="Café, editor, supermercado..."></div>
       <div><div class="field-lbl">Categoría</div><div class="cat-grid" id="mobCatGrid"></div></div>
@@ -390,11 +395,11 @@ html,body{font-family:'Satoshi',-apple-system,sans-serif;background:var(--bg);co
   </div>
 </div>
 <div class="mob-nav">
-  <div class="mob-nav-item on" id="mn-home" onclick="mobGo('home')"><div class="mob-nav-ico">🏠</div><div class="mob-nav-lbl">Inicio</div></div>
-  <div class="mob-nav-item" id="mn-txns" onclick="mobGo('txns')"><div class="mob-nav-ico">≡</div><div class="mob-nav-lbl">Gastos</div></div>
+  <div class="mob-nav-item on" id="mn-home" onclick="mobGo('home')"><div class="mob-nav-ico" data-i="🏠"></div><div class="mob-nav-lbl">Inicio</div></div>
+  <div class="mob-nav-item" id="mn-txns" onclick="mobGo('txns')"><div class="mob-nav-ico" data-i="🧾"></div><div class="mob-nav-lbl">Gastos</div></div>
   <div class="mob-nav-item" id="mn-add" onclick="mobGo('add')"><div class="mob-fab">＋</div><div class="mob-nav-lbl">Agregar</div></div>
-  <div class="mob-nav-item" id="mn-metas" onclick="mobGo('metas')"><div class="mob-nav-ico">🎯</div><div class="mob-nav-lbl">Metas</div></div>
-  <div class="mob-nav-item" id="mn-invest" onclick="mobGo('invest')"><div class="mob-nav-ico">📈</div><div class="mob-nav-lbl">Invers.</div></div>
+  <div class="mob-nav-item" id="mn-metas" onclick="mobGo('metas')"><div class="mob-nav-ico" data-i="🎯"></div><div class="mob-nav-lbl">Metas</div></div>
+  <div class="mob-nav-item" id="mn-invest" onclick="mobGo('invest')"><div class="mob-nav-ico" data-i="📈"></div><div class="mob-nav-lbl">Invers.</div></div>
 </div>
 </div>
 
@@ -409,6 +414,22 @@ html,body{font-family:'Satoshi',-apple-system,sans-serif;background:var(--bg);co
       <div><div class="field-lbl">Meta total (CLP)</div><input type="number" class="field-inp" id="meGoal"></div>
       <div class="field-row2"><div><div class="field-lbl">Aporte mensual</div><input type="number" class="field-inp" id="meMo"></div><div><div class="field-lbl">Fecha objetivo</div><input type="text" class="field-inp" id="meEta" placeholder="Marzo 2028"></div></div>
       <button class="save-btn" onclick="saveMeta()">Guardar cambios</button>
+    </div>
+  </div>
+</div>
+<!-- EDIT TX MODAL -->
+<div class="modal" id="txModal" onclick="if(event.target.classList.contains('modal-overlay')||event.target===this)closeTxModal()">
+  <div class="modal-overlay"></div>
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px"><div style="font-size:15px;font-weight:700">Editar movimiento</div><div onclick="delTx()" style="font-size:11px;color:var(--red);font-weight:700;cursor:pointer">🗑 Eliminar</div></div>
+    <div style="display:flex;flex-direction:column;gap:11px">
+      <div class="type-row" id="etTypeRow"><button class="type-btn" onclick="etSetType('expense')">💸 Gasto</button><button class="type-btn" onclick="etSetType('income')">💰 Ingreso</button></div>
+      <div class="field-row2"><div><div class="field-lbl" id="etAmtLbl">Monto CLP</div><input type="number" class="field-inp" id="etAmt"></div><div><div class="field-lbl">Fecha</div><input type="date" class="field-inp" id="etDate"></div></div>
+      <div><div class="field-lbl">Descripción</div><input type="text" class="field-inp" id="etDesc"></div>
+      <div class="field-row2"><div><div class="field-lbl">Categoría</div><select class="field-inp" id="etCat"></select></div><div><div class="field-lbl">Cuenta</div><select class="field-inp" id="etAcc" onchange="etAccChange()"></select></div></div>
+      <label style="display:flex;align-items:center;gap:9px;padding:11px 13px;background:var(--s2);border-radius:var(--r-sm);border:1px solid var(--border);cursor:pointer"><span style="font-size:11px;font-weight:500;flex:1">🔄 Suscripción fija</span><label class="toggle"><input type="checkbox" id="etFixed"><div class="toggle-track"></div><div class="toggle-thumb"></div></label></label>
+      <button class="save-btn" onclick="saveTxEdit()">Guardar cambios</button>
     </div>
   </div>
 </div>
@@ -470,6 +491,23 @@ const fmt=n=>'$'+Math.abs(n).toLocaleString('es-CL');
 const fmtK=n=>{const a=Math.abs(n);return(n<0?'-':'')+'$'+(a>=1e6?(a/1e6).toFixed(1)+'M':a>=1e3?(a/1e3).toFixed(0)+'K':a.toLocaleString('es-CL'));};
 const ci=id=>CATS.find(c=>c.id===id)||{ico:'💳',color:'#555'};
 const h2r=h=>{const r=parseInt(h.slice(1,3),16),g=parseInt(h.slice(3,5),16),b=parseInt(h.slice(5,7),16);return`${r},${g},${b}`;};
+// Íconos 3D (Microsoft Fluent Emoji 3D, MIT). Fallback automático al emoji si no carga.
+const FLU='https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/';
+const E3={
+  '🍽️':['Fork and knife with plate','fork_and_knife_with_plate'],'🛒':['Shopping cart','shopping_cart'],
+  '☕':['Hot beverage','hot_beverage'],'🚇':['Metro','metro'],'⚙️':['Gear','gear'],'📱':['Mobile phone','mobile_phone'],
+  '💊':['Pill','pill'],'📚':['Books','books'],'👕':['T-Shirt','t_shirt'],'👨‍💻':['Man technologist','man_technologist'],
+  '💳':['Credit card','credit_card'],'💰':['Money bag','money_bag'],'🏠':['House','house'],'🎯':['Direct hit','direct_hit'],
+  '📈':['Chart increasing','chart_increasing'],'🔔':['Bell','bell'],'🏦':['Bank','bank'],'🟢':['Green circle','green_circle'],
+  '💚':['Green heart','green_heart'],'🔴':['Red circle','red_circle'],'✈️':['Airplane','airplane'],'🛋️':['Couch and lamp','couch_and_lamp'],
+  '💵':['Dollar banknote','dollar_banknote'],'🛡️':['Shield','shield'],'⚡':['High voltage','high_voltage'],'🍔':['Hamburger','hamburger'],
+  '🏋️':['Person lifting weights','person_lifting_weights'],'🎬':['Clapper board','clapper_board'],'🎧':['Headphone','headphone'],
+  '🧥':['Coat','coat'],'📝':['Memo','memo'],'📊':['Bar chart','bar_chart'],'🎞️':['Film frames','film_frames'],
+  '🛍️':['Shopping bags','shopping_bags'],'💸':['Money with wings','money_with_wings'],'📦':['Package','package'],
+  '🔄':['Counterclockwise arrows button','counterclockwise_arrows_button'],'🧾':['Receipt','receipt'],'💡':['Light bulb','light_bulb'],
+};
+function i3d(e){const m=E3[e];if(!m)return e;const u=FLU+encodeURIComponent(m[0])+'/3D/'+m[1]+'_3d.png';return `<img class="e3" src="${u}" data-e="${e}" onerror="this.outerHTML=this.dataset.e" alt="">`;}
+function applyNavIcons(){document.querySelectorAll('[data-i]').forEach(el=>{el.innerHTML=i3d(el.getAttribute('data-i'));});}
 function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('on');setTimeout(()=>t.classList.remove('on'),2500);}
 
 function setConn(ok){
@@ -554,11 +592,17 @@ async function loadRates(){
   }catch{/* mantiene tasas de respaldo */}
 }
 
-// Cambia moneda del formulario según la cuenta elegida (Truist=USD, Santander España=EUR, resto CLP)
-function onAccChange(px){updateAmtDisp(px);}
+// Divisa elegida en el formulario (por defecto sigue la cuenta, pero se puede sobreescribir con el selector)
+let addDivisa={mob:'CLP',ds:'CLP'};
+function setAddDiv(px,cur){
+  addDivisa[px]=cur;
+  document.querySelectorAll('#'+(px==='mob'?'mobAddDiv':'dsAddDiv')+' .cur-seg').forEach(b=>b.classList.toggle('on',b.dataset.d===cur));
+  updateAmtDisp(px);
+}
+// Al cambiar de cuenta, sugiere su divisa nativa (Truist=USD, Santander España=EUR, resto CLP); el usuario puede cambiarla.
+function onAccChange(px){const acc=document.getElementById(px==='mob'?'mobAcc':'dsAcc')?.value;setAddDiv(px,accCur(acc));}
 function updateAmtDisp(px){
-  const accEl=document.getElementById(px==='mob'?'mobAcc':'dsAcc');
-  const cur=accCur(accEl?accEl.value:'—');
+  const cur=addDivisa[px]||'CLP';
   const sym=DIV_SYM[cur];
   const val=parseFloat(document.getElementById(px==='mob'?'mobAmt':'dsAmt')?.value)||0;
   const lbl=document.getElementById(px==='mob'?'mobAmtLbl':'dsAmtLbl');
@@ -618,7 +662,7 @@ function txRow(t,pad='20px'){
   const native=t.moneda&&t.moneda!=='CLP'&&t.monto_orig!=null;
   const amtTxt=native?DIV_SYM[t.moneda]+Number(t.monto_orig).toLocaleString('es-CL',{maximumFractionDigits:2}):fmt(t.monto);
   const clpEq=native?`<div style="font-size:8px;color:var(--text3);margin-top:1px">≈ ${fmt(t.monto)}</div>`:'';
-  return `<div class="tx-item" style="padding:11px ${pad}"><div class="tx-ico" style="background:${bg}">${m.ico}</div><div class="tx-info"><div class="tx-name">${t.descripcion}</div><div class="tx-meta">${t.categoria}${curBadge}${fb}</div></div><div class="tx-right"><div class="tx-amt" style="color:${ac}">${sign}${amtTxt}</div>${clpEq}<div class="tx-date">${d}</div></div></div>`;
+  return `<div class="tx-item" onclick="openTx(${t.id})" style="padding:11px ${pad}"><div class="tx-ico" style="background:${bg}">${i3d(m.ico)}</div><div class="tx-info"><div class="tx-name">${t.descripcion}</div><div class="tx-meta">${t.categoria}${curBadge}${fb}</div></div><div class="tx-right"><div class="tx-amt" style="color:${ac}">${sign}${amtTxt}</div>${clpEq}<div class="tx-date">${d}</div></div></div>`;
 }
 
 function renderTxPrev(){
@@ -658,13 +702,13 @@ function renderMetas(){
   const mc=document.getElementById('mobMetaCards');
   if(mc)mc.innerHTML=METAS.map(m=>{
     const p=Math.min(100,(m.actual/m.objetivo*100)).toFixed(1);
-    return `<div class="meta-card" onclick="openMeta('${m.id}')"><div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px"><div style="display:flex;align-items:center;gap:9px"><div style="width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:15px;background:${m.color}22">${m.nombre.split(' ')[0]}</div><div><div style="font-size:13px;font-weight:700">${m.nombre.slice(m.nombre.indexOf(' ')+1)}</div><div style="font-size:10px;color:var(--text2);margin-top:1px">${m.eta}</div></div></div><div style="font-size:17px;font-weight:800;color:${m.color}">${p}%</div></div><div class="meta-track" style="margin-bottom:8px"><div class="meta-bar" style="width:${p}%;background:${m.color}"></div></div><div style="display:flex;justify-content:space-between"><span style="font-size:11px;font-weight:600">${fmt(m.actual)}</span><span style="font-size:11px;color:var(--text2)">${fmt(m.objetivo)}</span></div><div style="font-size:10px;color:var(--orange);font-weight:600;margin-top:6px;text-align:right">✏️ Editar →</div></div>`;
+    return `<div class="meta-card" onclick="openMeta('${m.id}')"><div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px"><div style="display:flex;align-items:center;gap:9px"><div style="width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:15px;background:${m.color}22">${i3d(m.nombre.split(' ')[0])}</div><div><div style="font-size:13px;font-weight:700">${m.nombre.slice(m.nombre.indexOf(' ')+1)}</div><div style="font-size:10px;color:var(--text2);margin-top:1px">${m.eta}</div></div></div><div style="font-size:17px;font-weight:800;color:${m.color}">${p}%</div></div><div class="meta-track" style="margin-bottom:8px"><div class="meta-bar" style="width:${p}%;background:${m.color}"></div></div><div style="display:flex;justify-content:space-between"><span style="font-size:11px;font-weight:600">${fmt(m.actual)}</span><span style="font-size:11px;color:var(--text2)">${fmt(m.objetivo)}</span></div><div style="font-size:10px;color:var(--orange);font-weight:600;margin-top:6px;text-align:right">✏️ Editar →</div></div>`;
   }).join('');
 }
 
 function renderSubs(){
   const tot=SUBS.filter(s=>s.activa).reduce((s,x)=>s+x.clp,0);
-  const h=SUBS.map((s,i)=>`<div class="sub-card"><div class="sub-ico">${s.ico||'📦'}</div><div style="flex:1;min-width:0"><div style="font-size:12px;font-weight:600">${s.nombre}</div><div style="font-size:10px;color:var(--text2);margin-top:1px">${s.usd?'USD '+s.usd+' · ':''} Día ${s.dia_cobro} · ${s.cuenta}</div></div><div style="font-size:11px;font-weight:700;color:var(--text2);margin-right:9px">${fmt(s.clp)}/mes</div><label class="toggle" onclick="tglSub('${s.id}',${!s.activa})"><input type="checkbox" ${s.activa?'checked':''} onchange="void 0"><div class="toggle-track"></div><div class="toggle-thumb"></div></label></div>`).join('');
+  const h=SUBS.map((s,i)=>`<div class="sub-card"><div class="sub-ico">${i3d(s.ico||'📦')}</div><div style="flex:1;min-width:0"><div style="font-size:12px;font-weight:600">${s.nombre}</div><div style="font-size:10px;color:var(--text2);margin-top:1px">${s.usd?'USD '+s.usd+' · ':''} Día ${s.dia_cobro} · ${s.cuenta}</div></div><div style="font-size:11px;font-weight:700;color:var(--text2);margin-right:9px">${fmt(s.clp)}/mes</div><label class="toggle" onclick="tglSub('${s.id}',${!s.activa})"><input type="checkbox" ${s.activa?'checked':''} onchange="void 0"><div class="toggle-track"></div><div class="toggle-thumb"></div></label></div>`).join('');
   const totTxt=`Total activo: ${fmt(tot)}/mes`;
   ['dsSubList','mobSubList'].forEach(id=>{const e=document.getElementById(id);if(e)e.innerHTML=h;});
   ['dsSubTot','mobSubTot'].forEach(id=>{const e=document.getElementById(id);if(e)e.textContent=totTxt;});
@@ -683,7 +727,7 @@ function renderAccounts(){
     const balMain=a.cur==='CLP'?fmt(a.bal):DIV_SYM[a.cur]+Number(a.bal).toLocaleString('es-CL',{maximumFractionDigits:2});
     const balSub=a.cur==='CLP'?a.sub:'≈ '+fmt(clp);
     const invTag=a.inv?'<span class="acc-cur-badge" style="background:rgba(123,111,255,.15);color:var(--purple)">INVERSIÓN</span>':'';
-    return `<div class="acc-row"><div class="acc-row-ico" style="background:${a.color}22">${a.ico}</div><div style="flex:1;min-width:0"><div class="acc-row-name">${k}<span class="acc-cur-badge">${a.cur}</span>${invTag}</div><div class="acc-row-sub">${a.sub}</div></div><div class="acc-row-bal"><div class="acc-row-bal-main">${balMain}</div><div class="acc-row-bal-sub">${balSub}</div></div></div>`;
+    return `<div class="acc-row"><div class="acc-row-ico" style="background:${a.color}22">${i3d(a.ico)}</div><div style="flex:1;min-width:0"><div class="acc-row-name">${k}<span class="acc-cur-badge">${a.cur}</span>${invTag}</div><div class="acc-row-sub">${a.sub}</div></div><div class="acc-row-bal"><div class="acc-row-bal-main">${balMain}</div><div class="acc-row-bal-sub">${balSub}</div></div></div>`;
   }).join('');
 }
 
@@ -711,7 +755,7 @@ function buildCatGrids(){
   ['dsCatGrid','mobCatGrid'].forEach(gid=>{
     const el=document.getElementById(gid);if(!el)return;
     const px=gid.startsWith('ds')?'ds':'mob';
-    el.innerHTML=CATS.map(c=>`<div class="cat-chip${curCat[px]===c.id?' sel':''}" onclick="selCat('${c.id}','${px}','${gid}')"><div class="cat-chip-ico">${c.ico}</div><div class="cat-chip-lbl">${c.id}</div></div>`).join('');
+    el.innerHTML=CATS.map(c=>`<div class="cat-chip${curCat[px]===c.id?' sel':''}" onclick="selCat('${c.id}','${px}','${gid}')"><div class="cat-chip-ico">${i3d(c.ico)}</div><div class="cat-chip-lbl">${c.id}</div></div>`).join('');
   });
 }
 
@@ -762,7 +806,7 @@ async function saveTx(px){
   const acc=document.getElementById(isM?'mobAcc':'dsAcc')?.value;
   const fixed=document.getElementById(isM?'mobFixed':'dsFixed')?.checked||false;
   if(!desc||!amt){toast('⚠ Completa descripción y monto');return;}
-  const cur=accCur(acc);
+  const cur=addDivisa[px]||accCur(acc);
   const montoCLP=Math.round(amt*(RATES[cur]||1));
   const btn=document.getElementById(isM?'mobSaveBtn':'dsSaveBtn');
   if(btn){btn.textContent='Guardando...';btn.disabled=true;}
@@ -776,6 +820,50 @@ async function saveTx(px){
     renderAll();if(isM)mobGo('home');else dsGo('home',null);
   }catch{toast('⚠ Error al guardar');}
   finally{if(btn){btn.textContent='Guardar transacción';btn.disabled=false;}}
+}
+
+// ===== EDITAR / ELIMINAR MOVIMIENTOS =====
+const ACCOUNT_LIST=['Falabella','Mercado Pago','Tenpo','Tenpo TC','Santander Chile','Truist','Santander España','Wise','Racional','—'];
+let editTxId=null, etType='expense';
+function openTx(id){
+  const t=TXS.find(x=>x.id===id);if(!t)return;
+  editTxId=id;etType=t.tipo;
+  const btns=document.querySelectorAll('#etTypeRow .type-btn');
+  btns[0].classList.toggle('t-exp',t.tipo==='expense');btns[1].classList.toggle('t-inc',t.tipo==='income');
+  document.getElementById('etCat').innerHTML=CATS.map(c=>`<option ${c.id===t.categoria?'selected':''}>${c.id}</option>`).join('');
+  document.getElementById('etAcc').innerHTML=ACCOUNT_LIST.map(a=>`<option ${a===t.cuenta?'selected':''}>${a}</option>`).join('');
+  const native=t.moneda&&t.moneda!=='CLP'&&t.monto_orig!=null;
+  document.getElementById('etAmt').value=native?t.monto_orig:t.monto;
+  document.getElementById('etDesc').value=t.descripcion||'';
+  document.getElementById('etDate').value=t.fecha||'';
+  document.getElementById('etFixed').checked=!!t.fija;
+  etAccChange();
+  document.getElementById('txModal').classList.add('on');
+}
+function etSetType(tp){etType=tp;const b=document.querySelectorAll('#etTypeRow .type-btn');b[0].classList.toggle('t-exp',tp==='expense');b[1].classList.toggle('t-inc',tp==='income');}
+function etAccChange(){const cur=accCur(document.getElementById('etAcc').value);const l=document.getElementById('etAmtLbl');if(l)l.textContent='Monto '+cur;}
+function closeTxModal(){document.getElementById('txModal').classList.remove('on');editTxId=null;}
+async function saveTxEdit(){
+  if(editTxId==null)return;
+  const acc=document.getElementById('etAcc').value;const cur=accCur(acc);
+  const amt=parseFloat(document.getElementById('etAmt').value)||0;
+  const desc=document.getElementById('etDesc').value.trim();
+  const date=document.getElementById('etDate').value||new Date().toISOString().slice(0,10);
+  const cat=document.getElementById('etCat').value;
+  const fixed=document.getElementById('etFixed').checked;
+  if(!desc||!amt){toast('⚠ Completa descripción y monto');return;}
+  const patch={descripcion:desc,categoria:cat,cuenta:acc,monto:Math.round(amt*(RATES[cur]||1)),monto_orig:amt,moneda:cur,tipo:etType,fija:fixed,fecha:date};
+  try{const{error}=await sb.from('transacciones').update(patch).eq('id',editTxId);if(error)throw error;
+    const i=TXS.findIndex(x=>x.id===editTxId);if(i>-1)TXS[i]={...TXS[i],...patch};
+    closeTxModal();renderAll();renderTxFull();toast('✓ Movimiento actualizado');
+  }catch{toast('⚠ Error al actualizar');}
+}
+async function delTx(){
+  if(editTxId==null)return;const id=editTxId;
+  try{const{error}=await sb.from('transacciones').delete().eq('id',id);if(error)throw error;
+    TXS=TXS.filter(x=>x.id!==id);
+    closeTxModal();renderAll();renderTxFull();toast('✓ Movimiento eliminado');
+  }catch{toast('⚠ Error al eliminar');}
 }
 
 function openMeta(id){
@@ -837,7 +925,7 @@ function renderInvest(){
     const nat=p.cur==='CLP'?'$'+p.bal.toLocaleString('es-CL'):'US$'+p.bal.toLocaleString('es-CL',{maximumFractionDigits:2});
     const sub=p.cur==='CLP'?'':'≈ $'+clp.toLocaleString('es-CL');
     const chg=p.pct?`<div class="pf-chg">↗ +${p.pct.toFixed(2)}%</div>`:'<div class="pf-chg" style="color:var(--text3);background:var(--s3)">—</div>';
-    return `<div class="pf-card"><div class="pf-top"><div class="pf-ico">${p.ico}</div><div style="min-width:0"><div class="pf-name">${p.nom}</div></div></div><div class="pf-val">${nat}</div>${sub?`<div class="pf-sub">${sub}</div>`:''}${chg}</div>`;
+    return `<div class="pf-card"><div class="pf-top"><div class="pf-ico">${i3d(p.ico)}</div><div style="min-width:0"><div class="pf-name">${p.nom}</div></div></div><div class="pf-val">${nat}</div>${sub?`<div class="pf-sub">${sub}</div>`:''}${chg}</div>`;
   }).join('');
   const totTxt='$'+total.toLocaleString('es-CL');
   const chgTxt='↗ +'+wpct.toFixed(2)+'% ponderado';
@@ -860,6 +948,7 @@ function setupRealtime(){
 async function init(){
   const today=new Date().toISOString().slice(0,10);
   ['mobDate','dsDate'].forEach(id=>{const e=document.getElementById(id);if(e)e.value=today;});
+  applyNavIcons();
   await fetchAll();setupRealtime();loadRates();
 }
 window.addEventListener('DOMContentLoaded',init);
