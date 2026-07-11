@@ -464,11 +464,11 @@ const CATS=[
 
 // Cuentas: bal = saldo en su moneda nativa (cur). El patrimonio se calcula en CLP al cambio del día.
 const ACCS={
-  'Racional':{ico:'📈',color:'#7B6FFF',sub:'Stocks + DAP + portafolios',cur:'CLP',bal:1061324,inv:true},
+  'Racional':{ico:'📈',color:'#7B6FFF',sub:'Stocks + DAP + portafolios',cur:'CLP',bal:2761324,inv:true},
   'Santander Chile':{ico:'🔴',color:'#EC0000',sub:'Cuenta Más Lucas',cur:'CLP',bal:301835},
-  'Mercado Pago':{ico:'🟢',color:'#00A650',sub:'BICE 3.9% anual',cur:'CLP',bal:88316},
+  'Mercado Pago':{ico:'🟢',color:'#00A650',sub:'BICE 3.9% anual',cur:'CLP',bal:176866},
   'Tenpo TC':{ico:'💳',color:'#1DB954',sub:'Tarjeta de crédito',cur:'CLP',bal:75547},
-  'Falabella':{ico:'🏦',color:'#CC0000',sub:'Débito Digital',cur:'CLP',bal:53467},
+  'Falabella':{ico:'🏦',color:'#CC0000',sub:'Débito Digital',cur:'CLP',bal:103467},
   'Truist':{ico:'🏦',color:'#5B2A86',sub:'Checking USD · EE.UU.',cur:'USD',bal:419.98},
   'Tenpo':{ico:'💚',color:'#1DB954',sub:'Vista',cur:'CLP',bal:525},
   'Santander España':{ico:'🇪🇸',color:'#EC0000',sub:'Cuenta EUR · España',cur:'EUR',bal:0},
@@ -477,11 +477,11 @@ const accClp=a=>Math.round(a.bal*(RATES[a.cur]||1));
 const patClp=()=>Object.values(ACCS).reduce((s,a)=>s+accClp(a),0);
 // Portafolios Racional (datos de hoy). Stocks/Billetera en USD -> se convierten a CLP al cambio del día.
 const RACIONAL=[
-  {ico:'🛋️',nom:'Casa',cur:'CLP',bal:306092,pct:1.46},
-  {ico:'💵',nom:'DAP',cur:'CLP',bal:202715,pct:1.11},
-  {ico:'✈️',nom:'Próximo viaje',cur:'CLP',bal:100754,pct:0.94},
-  {ico:'🛡️',nom:'DAP Riesgo',cur:'CLP',bal:29449,pct:0.93},
-  {ico:'💰',nom:'Salud',cur:'CLP',bal:30199,pct:0.81},
+  {ico:'🛋️',nom:'Casa',cur:'CLP',bal:986092,pct:1.46},
+  {ico:'💵',nom:'DAP',cur:'CLP',bal:542715,pct:1.11},
+  {ico:'✈️',nom:'Próximo viaje',cur:'CLP',bal:270754,pct:0.94},
+  {ico:'🛡️',nom:'DAP Riesgo',cur:'CLP',bal:369449,pct:0.93},
+  {ico:'💰',nom:'Salud',cur:'CLP',bal:200199,pct:0.81},
   {ico:'📈',nom:'Stocks (VOO)',cur:'USD',bal:417.09,pct:2.63},
   {ico:'⚡',nom:'Billetera',cur:'USD',bal:1.94,pct:0},
 ];
