@@ -460,7 +460,10 @@ const CATS=[
   {id:'Salud',ico:'💊',color:'#FDCB6E'},{id:'Educación',ico:'📚',color:'#55EFC4'},
   {id:'Personal',ico:'👕',color:'#FD79A8'},{id:'Editor',ico:'👨‍💻',color:'#7B6FFF'},
   {id:'Deuda',ico:'💳',color:'#FAB1A0'},{id:'Ingreso',ico:'💰',color:'#06D6A0'},
+  {id:'Transferencia',ico:'🔄',color:'#5B6CD6'},
 ];
+// Las transferencias entre cuentas propias no cuentan como ingreso/gasto real.
+const isReal=t=>t.categoria!=='Transferencia';
 
 // Cuentas: bal = saldo en su moneda nativa (cur). El patrimonio se calcula en CLP al cambio del día.
 const ACCS={
@@ -613,7 +616,7 @@ function updateAmtDisp(px){
 }
 
 function renderCards(){
-  const jul=TXS.filter(t=>t.fecha?.startsWith('2026-07'));
+  const jul=TXS.filter(t=>t.fecha?.startsWith('2026-07')&&isReal(t));
   const ing=jul.filter(t=>t.tipo==='income').reduce((s,t)=>s+t.monto,0);
   const gas=jul.filter(t=>t.tipo==='expense').reduce((s,t)=>s+t.monto,0);
   const el=document.getElementById('dsCards');
@@ -734,7 +737,7 @@ function renderAccounts(){
 // DESGLOSE POR DIVISA: neto del mes (julio) por moneda, en su unidad nativa
 function renderDivisas(){
   const el=document.getElementById('mobDivisas');if(!el)return;
-  const jul=TXS.filter(t=>t.fecha?.startsWith('2026-07'));
+  const jul=TXS.filter(t=>t.fecha?.startsWith('2026-07')&&isReal(t));
   const order=['CLP','USD','EUR'];
   const agg={};order.forEach(c=>agg[c]={in:0,out:0});
   jul.forEach(t=>{
@@ -767,7 +770,7 @@ function selCat(id,px,grid){
 
 let barDs,barM,donutDs,donutM;
 function initCharts(){
-  const mos={};TXS.forEach(t=>{const mo=(t.fecha||'').slice(0,7);if(!mo)return;if(!mos[mo])mos[mo]={i:0,g:0};if(t.tipo==='income')mos[mo].i+=t.monto;else mos[mo].g+=t.monto;});
+  const mos={};TXS.forEach(t=>{if(!isReal(t))return;const mo=(t.fecha||'').slice(0,7);if(!mo)return;if(!mos[mo])mos[mo]={i:0,g:0};if(t.tipo==='income')mos[mo].i+=t.monto;else mos[mo].g+=t.monto;});
   const s=Object.keys(mos).sort();
   const mn=['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
   const labels=s.map(m=>mn[parseInt(m.slice(5))-1]);
@@ -778,7 +781,7 @@ function initCharts(){
   if(barM)barM.destroy();const me=document.getElementById('mobBar');
   const optM={responsive:true,maintainAspectRatio:true,plugins:{legend:{align:'start',labels:{color:tc,font:{size:9,family:'Satoshi'},boxWidth:8,boxHeight:8,padding:10,usePointStyle:true,pointStyle:'circle'}}},scales:{x:{grid:{display:false},ticks:{color:tc,font:{size:9}}},y:{grid:{color:'rgba(255,255,255,.04)'},border:{display:false},ticks:{color:'var(--text3)',font:{size:8},callback:v=>'$'+(v>=1e6?(v/1e6).toFixed(1)+'M':(v/1e3).toFixed(0)+'K')}}}};
   if(me)barM=new Chart(me,{type:'bar',data:{labels,datasets:[{label:'Ingresos',data:s.map(m=>mos[m].i),backgroundColor:'rgba(255,107,43,.9)',borderRadius:5,borderSkipped:false},{label:'Gastos',data:s.map(m=>mos[m].g),backgroundColor:'rgba(124,92,252,.9)',borderRadius:5,borderSkipped:false}]},options:optM});
-  const cats={};TXS.filter(t=>t.tipo==='expense').forEach(t=>{cats[t.categoria]=(cats[t.categoria]||0)+t.monto;});
+  const cats={};TXS.filter(t=>t.tipo==='expense'&&isReal(t)).forEach(t=>{cats[t.categoria]=(cats[t.categoria]||0)+t.monto;});
   const ce=Object.entries(cats).sort((a,b)=>b[1]-a[1]).slice(0,7);
   if(donutDs)donutDs.destroy();const doe=document.getElementById('dsDonut');
   if(doe)donutDs=new Chart(doe,{type:'doughnut',data:{labels:ce.map(c=>c[0]),datasets:[{data:ce.map(c=>c[1]),backgroundColor:ce.map(c=>ci(c[0]).color),borderWidth:0,hoverOffset:4}]},options:{cutout:'62%',responsive:true,maintainAspectRatio:true,plugins:{legend:{position:'bottom',labels:{color:tc,font:{size:9,family:'Satoshi'},boxWidth:7,boxHeight:7,padding:6}}}}});
