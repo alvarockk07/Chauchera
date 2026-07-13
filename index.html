@@ -308,7 +308,7 @@ html,body{font-family:'Satoshi',-apple-system,sans-serif;background:var(--bg);co
     </div>
     <div style="padding:12px 20px 0"><div style="font-size:21px;font-weight:800;letter-spacing:-.5px">Buenos días, Álvaro</div><div style="font-size:11px;color:var(--text2);margin-top:2px">Tu dinero en todas tus cuentas · act. recién</div></div>
     <!-- HERO BALANCE -->
-    <div class="mh-hero"><div class="mh-hero-lbl">Patrimonio total</div><div class="mh-bal" id="mobBal">—</div><div class="mh-bal-sub">Todas las cuentas · Julio 2026</div><div id="curSeg" class="cur-seg-wrap"><button class="cur-seg on" data-d="CLP" onclick="setDivisa('CLP')">CLP</button><button class="cur-seg" data-d="USD" onclick="setDivisa('USD')">USD</button><button class="cur-seg" data-d="EUR" onclick="setDivisa('EUR')">EUR</button></div><div class="cur-rate" id="curRateNote"></div></div>
+    <div class="mh-hero"><div class="mh-hero-lbl">Disponible · líquido</div><div class="mh-bal" id="mobBal">—</div><div class="mh-bal-sub">Patrimonio total <b id="mobPat" style="color:var(--text2);font-weight:700">—</b> · con inversiones</div><div id="curSeg" class="cur-seg-wrap"><button class="cur-seg on" data-d="CLP" onclick="setDivisa('CLP')">CLP</button><button class="cur-seg" data-d="USD" onclick="setDivisa('USD')">USD</button><button class="cur-seg" data-d="EUR" onclick="setDivisa('EUR')">EUR</button></div><div class="cur-rate" id="curRateNote"></div></div>
     <!-- RESUMEN INGRESOS VS GASTOS -->
     <div class="mh-sum">
       <div class="mh-sum-hdr"><span class="mh-sum-ttl">Julio 2026 · Neto</span><span class="mh-sum-net" id="mobNet">—</span></div>
@@ -456,11 +456,9 @@ const accCur=name=>ACC_CUR[name]||'CLP';
 const CATS=[
   {id:'Comida',ico:'🍽️',color:'#E17055'},{id:'Supermercado',ico:'🛒',color:'#74B9FF'},
   {id:'Café',ico:'☕',color:'#D4A373'},{id:'Transporte',ico:'🚇',color:'#A29BFE'},
-  {id:'Herramientas',ico:'⚙️',color:'#00CEC9'},{id:'Servicios',ico:'📱',color:'#81ECEC'},
-  {id:'Salud',ico:'💊',color:'#FDCB6E'},{id:'Educación',ico:'📚',color:'#55EFC4'},
-  {id:'Personal',ico:'👕',color:'#FD79A8'},{id:'Editor',ico:'👨‍💻',color:'#7B6FFF'},
-  {id:'Deuda',ico:'💳',color:'#FAB1A0'},{id:'Ingreso',ico:'💰',color:'#06D6A0'},
-  {id:'Transferencia',ico:'🔄',color:'#5B6CD6'},
+  {id:'Servicios',ico:'🧰',color:'#00CEC9'},{id:'Salud',ico:'💊',color:'#FDCB6E'},
+  {id:'Personal',ico:'👕',color:'#FD79A8'},{id:'Deuda',ico:'💳',color:'#FAB1A0'},
+  {id:'Ingreso',ico:'💰',color:'#06D6A0'},{id:'Transferencia',ico:'🔄',color:'#5B6CD6'},
 ];
 // Las transferencias entre cuentas propias no cuentan como ingreso/gasto real.
 const isReal=t=>t.categoria!=='Transferencia';
@@ -508,6 +506,7 @@ const E3={
   '🧥':['Coat','coat'],'📝':['Memo','memo'],'📊':['Bar chart','bar_chart'],'🎞️':['Film frames','film_frames'],
   '🛍️':['Shopping bags','shopping_bags'],'💸':['Money with wings','money_with_wings'],'📦':['Package','package'],
   '🔄':['Counterclockwise arrows button','counterclockwise_arrows_button'],'🧾':['Receipt','receipt'],'💡':['Light bulb','light_bulb'],
+  '🧰':['Toolbox','toolbox'],
 };
 function i3d(e){const m=E3[e];if(!m)return e;const u=FLU+encodeURIComponent(m[0])+'/3D/'+m[1]+'_3d.png';return `<img class="e3" src="${u}" data-e="${e}" onerror="this.outerHTML=this.dataset.e" alt="">`;}
 function applyNavIcons(){document.querySelectorAll('[data-i]').forEach(el=>{el.innerHTML=i3d(el.getAttribute('data-i'));});}
@@ -525,13 +524,15 @@ function setConn(ok){
 
 async function fetchAll(){
   try{
-    const[t,m,s]=await Promise.all([
+    const[t,m,s,c]=await Promise.all([
       sb.from('transacciones').select('*').order('fecha',{ascending:false}),
       sb.from('metas').select('*'),
       sb.from('suscripciones').select('*').order('nombre'),
+      sb.from('cuentas').select('*'),
     ]);
     if(t.error||m.error||s.error)throw new Error();
     TXS=t.data||[];METAS=m.data||[];SUBS=s.data||[];
+    (c.data||[]).forEach(r=>{if(ACCS[r.nombre])ACCS[r.nombre].bal=Number(r.saldo);});
     setConn(true);renderAll();
   }catch{setConn(false);toast('⚠ Error al conectar');}
 }
@@ -625,9 +626,11 @@ function renderCards(){
     <div class="card"><div class="card-lbl">Gastos julio</div><div class="card-val" style="color:var(--red)">${fmt(gas)}</div><div class="card-sub">Operacionales</div><div class="chip chip-r">Controlado</div></div>
     <div class="card"><div class="card-lbl">Balance julio</div><div class="card-val" style="color:var(--orange)">${fmt(ing-gas)}</div><div class="card-sub">Real disponible</div><div class="chip chip-o">Positivo</div></div>
     <div class="card"><div class="card-lbl">Patrimonio</div><div class="card-val">${fmt(patClp())}</div><div class="card-sub">Todas las cuentas</div><div class="chip chip-y">Creciendo</div></div>`;
+  const disp=Object.values(ACCS).filter(a=>!a.inv).reduce((s,a)=>s+accClp(a),0);
   const ids=['mobBal','mobIng','mobGas','mobNet'];
-  const vals=[convFmt(patClp()),convFmtK(ing),convFmtK(gas),convFmtK(ing-gas)];
+  const vals=[convFmt(disp),convFmtK(ing),convFmtK(gas),convFmtK(ing-gas)];
   ids.forEach((id,i)=>{const e=document.getElementById(id);if(e)e.textContent=vals[i];});
+  const mp=document.getElementById('mobPat');if(mp)mp.textContent=convFmt(patClp());
   // barra proporcional ingresos vs gastos
   const tot=ing+gas||1;
   const bi=document.getElementById('mobBarInc');if(bi)bi.style.width=(ing/tot*100).toFixed(1)+'%';
@@ -658,7 +661,7 @@ function txRow(t,pad='20px'){
   const ac=t.tipo==='income'?'var(--green)':'var(--red)';
   const sign=t.tipo==='income'?'+':'-';
   const d=(t.fecha||'').slice(5).replace('-','/');
-  const m=txIco(t);
+  const m=ci(t.categoria);
   const bg=t.tipo==='income'?'rgba(6,214,160,.14)':`rgba(${h2r(m.color)},.16)`;
   const fb=t.fija?'<span class="fb">FIJA</span>':'';
   const curBadge=t.moneda&&t.moneda!=='CLP'?`<span class="fb" style="background:rgba(255,107,43,.15);color:var(--orange)">${t.moneda}</span>`:'';
@@ -801,6 +804,18 @@ function setType(t,px){
   btns[0].classList.toggle('t-exp',t==='expense');btns[1].classList.toggle('t-inc',t==='income');
 }
 
+// Ajuste automático de saldos de cuenta (solo gastos/ingresos reales, no transferencias)
+function txDelta(t){
+  const ac=accCur(t.cuenta);
+  const nat=(t.moneda===ac&&t.monto_orig!=null)?Number(t.monto_orig):t.monto/(RATES[ac]||1);
+  return (t.tipo==='income'?1:-1)*nat;
+}
+function adjustSaldo(cuenta,delta){
+  const a=ACCS[cuenta];if(!a)return;
+  a.bal=Number(a.bal||0)+delta;
+  sb.from('cuentas').update({saldo:a.bal,updated_at:new Date().toISOString()}).eq('nombre',cuenta).then(()=>{},()=>{});
+}
+
 async function saveTx(px){
   const isM=px==='mob';
   const amt=parseFloat(document.getElementById(isM?'mobAmt':'dsAmt')?.value)||0;
@@ -816,7 +831,7 @@ async function saveTx(px){
   try{
     const{data,error}=await sb.from('transacciones').insert([{fecha:date,descripcion:desc,categoria:curCat[px],cuenta:acc,monto:montoCLP,monto_orig:amt,moneda:cur,tipo:curType[px],fija:fixed}]).select().single();
     if(error)throw error;
-    TXS.unshift(data);toast(cur==='CLP'?'✓ Guardado en Supabase':`✓ Guardado · ${DIV_SYM[cur]}${amt} = ${fmt(montoCLP)}`);
+    TXS.unshift(data);if(isReal(data))adjustSaldo(data.cuenta,txDelta(data));toast(cur==='CLP'?'✓ Guardado en Supabase':`✓ Guardado · ${DIV_SYM[cur]}${amt} = ${fmt(montoCLP)}`);
     ['mobAmt','dsAmt','mobDesc','dsDesc'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});
     const md=document.getElementById('mobAmtDisp');if(md)md.textContent='$0';
     ['mobAmtHint','dsAmtHint'].forEach(id=>{const e=document.getElementById(id);if(e)e.textContent='';});
@@ -857,13 +872,17 @@ async function saveTxEdit(){
   if(!desc||!amt){toast('⚠ Completa descripción y monto');return;}
   const patch={descripcion:desc,categoria:cat,cuenta:acc,monto:Math.round(amt*(RATES[cur]||1)),monto_orig:amt,moneda:cur,tipo:etType,fija:fixed,fecha:date};
   try{const{error}=await sb.from('transacciones').update(patch).eq('id',editTxId);if(error)throw error;
-    const i=TXS.findIndex(x=>x.id===editTxId);if(i>-1)TXS[i]={...TXS[i],...patch};
+    const i=TXS.findIndex(x=>x.id===editTxId);
+    if(i>-1){const old=TXS[i];if(isReal(old))adjustSaldo(old.cuenta,-txDelta(old));
+      const nu={...old,...patch};TXS[i]=nu;if(isReal(nu))adjustSaldo(nu.cuenta,txDelta(nu));}
     closeTxModal();renderAll();renderTxFull();toast('✓ Movimiento actualizado');
   }catch{toast('⚠ Error al actualizar');}
 }
 async function delTx(){
   if(editTxId==null)return;const id=editTxId;
+  const t=TXS.find(x=>x.id===id);
   try{const{error}=await sb.from('transacciones').delete().eq('id',id);if(error)throw error;
+    if(t&&isReal(t))adjustSaldo(t.cuenta,-txDelta(t));
     TXS=TXS.filter(x=>x.id!==id);
     closeTxModal();renderAll();renderTxFull();toast('✓ Movimiento eliminado');
   }catch{toast('⚠ Error al eliminar');}
