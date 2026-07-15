@@ -465,7 +465,7 @@ const isReal=t=>t.categoria!=='Transferencia';
 
 // Cuentas: bal = saldo en su moneda nativa (cur). El patrimonio se calcula en CLP al cambio del día.
 const ACCS={
-  'Racional':{ico:'📈',color:'#7B6FFF',sub:'Stocks + DAP + portafolios',cur:'CLP',bal:2761324,inv:true},
+  'Racional':{ico:'📈',color:'#7B6FFF',sub:'Stocks + DAP + portafolios',cur:'CLP',bal:2755945,inv:true},
   'Santander Chile':{ico:'🔴',color:'#EC0000',sub:'Cuenta Más Lucas',cur:'CLP',bal:301835},
   'Mercado Pago':{ico:'🟢',color:'#00A650',sub:'BICE 3.9% anual',cur:'CLP',bal:176866},
   'Tenpo TC':{ico:'💳',color:'#1DB954',sub:'Tarjeta de crédito',cur:'CLP',bal:75547},
@@ -478,12 +478,12 @@ const accClp=a=>Math.round(a.bal*(RATES[a.cur]||1));
 const patClp=()=>Object.values(ACCS).reduce((s,a)=>s+accClp(a),0);
 // Portafolios Racional (datos de hoy). Stocks/Billetera en USD -> se convierten a CLP al cambio del día.
 const RACIONAL=[
-  {ico:'🛋️',nom:'Casa',cur:'CLP',bal:986092,pct:1.46},
-  {ico:'💵',nom:'DAP',cur:'CLP',bal:542715,pct:1.11},
-  {ico:'✈️',nom:'Próximo viaje',cur:'CLP',bal:270754,pct:0.94},
-  {ico:'🛡️',nom:'DAP Riesgo',cur:'CLP',bal:369449,pct:0.93},
-  {ico:'💰',nom:'Salud',cur:'CLP',bal:200199,pct:0.81},
-  {ico:'📈',nom:'Stocks (VOO)',cur:'USD',bal:417.09,pct:2.63},
+  {ico:'🛋️',nom:'Casa',cur:'CLP',bal:985077,pct:12.68},
+  {ico:'💵',nom:'DAP',cur:'CLP',bal:542188,pct:20.27},
+  {ico:'🛡️',nom:'DAP Riesgo',cur:'CLP',bal:369149,pct:14.79},
+  {ico:'✈️',nom:'Próximo viaje',cur:'CLP',bal:270526,pct:0.67},
+  {ico:'💰',nom:'Salud',cur:'CLP',bal:200043,pct:0.58},
+  {ico:'📈',nom:'Stocks (VOO)',cur:'USD',bal:413.72,pct:20.88},
   {ico:'⚡',nom:'Billetera',cur:'USD',bal:1.94,pct:0},
 ];
 const pfClp=p=>Math.round(p.bal*(RATES[p.cur]||1));
