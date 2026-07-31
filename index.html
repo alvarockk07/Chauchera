@@ -198,6 +198,11 @@ html,body{font-family:'Satoshi',-apple-system,sans-serif;background:var(--bg);co
 .mh-act2:active .mh-act2-ico{transform:scale(.92);background:var(--s2);}
 .mh-act2-ico svg{width:22px;height:22px;}
 .mh-act2-lbl{font-size:10px;color:var(--text2);font-weight:600;}
+.mh-insight{margin:0 20px;background:var(--s1);border:1px solid var(--border);border-radius:16px;padding:4px 14px;}
+.ins-row{display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-bottom:1px solid var(--border);font-size:12px;}
+.ins-row:last-child{border-bottom:none;}
+.ins-ico{font-size:16px;line-height:1.2;flex-shrink:0;}
+.ins-txt{color:var(--text);font-weight:500;line-height:1.35;}
 .mh-sum{margin:16px 20px 0;background:var(--s1);border:1px solid var(--border);border-radius:18px;padding:15px;}
 .mh-sum-hdr{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:11px;}
 .mh-sum-ttl{font-size:11px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.6px;}
@@ -348,6 +353,9 @@ html,body{font-family:'Satoshi',-apple-system,sans-serif;background:var(--bg);co
       <div class="mh-act2" onclick="mobGo('txns')"><div class="mh-act2-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg></div><span class="mh-act2-lbl">Movimientos</span></div>
       <div class="mh-act2" onclick="mobGo('bal')"><div class="mh-act2-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="14" rx="3"/><path d="M2 10h20"/><circle cx="17" cy="14" r="1.4" fill="currentColor" stroke="none"/></svg></div><span class="mh-act2-lbl">Cuentas</span></div>
     </div>
+    <!-- RESUMEN INTELIGENTE -->
+    <div class="sec-hdr"><span class="sec-title">Resumen inteligente</span></div>
+    <div class="mh-insight" id="mobInsight"></div>
     <!-- UN GRÁFICO: gastos por categoría -->
     <div class="sec-hdr"><span class="sec-title">Gastos por categoría</span><span class="sec-link" onclick="mobGo('txns')">Ver detalle →</span></div>
     <div class="mh-donut"><div class="mh-donut-c"><canvas id="mobDonut"></canvas><div class="donut-center"><div class="donut-center-val" id="mobDonutTot">—</div><div class="donut-center-lbl">gastado</div></div></div><div class="mh-donut-leg" id="mobDonutLeg"></div></div>
@@ -363,7 +371,8 @@ html,body{font-family:'Satoshi',-apple-system,sans-serif;background:var(--bg);co
   </div>
   <!-- TXNS -->
   <div class="view" id="mob-txns">
-    <div style="padding:16px 20px 0;display:flex;justify-content:space-between;align-items:center"><div style="font-size:19px;font-weight:800">Transacciones</div><button onclick="mobGo('add')" style="padding:6px 13px;border-radius:8px;border:none;background:var(--orange);color:#fff;font-size:10px;font-weight:700;font-family:'Satoshi',sans-serif;cursor:pointer">＋ Nueva</button></div>
+    <div style="padding:16px 20px 0;display:flex;justify-content:space-between;align-items:center"><div style="font-size:19px;font-weight:800">Transacciones</div><button onclick="mobGo('add')" style="padding:6px 13px;border-radius:8px;border:none;background:var(--purple);color:#fff;font-size:10px;font-weight:700;font-family:'Satoshi',sans-serif;cursor:pointer">＋ Nueva</button></div>
+    <div class="mh-search" style="margin-top:12px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><input type="text" id="mobTxSearch" placeholder="Buscar por comercio o categoría..." oninput="txSearchFn(this.value)"></div>
     <div class="month-tabs"><div class="month-tab on" onclick="filterMonth(this,'07')">Julio</div><div class="month-tab" onclick="filterMonth(this,'06')">Junio</div><div class="month-tab" onclick="filterMonth(this,'all')">Todo</div></div>
     <div class="cat-filter" id="mobCatFilter"></div>
     <div class="tx-tot" id="mobTxTot"></div>
@@ -715,10 +724,14 @@ function filterCat(id){activeCat=id;buildCatFilter();renderTxFull();}
 // Desde el donut de la home: tocar una categoría lleva a Movimientos filtrado
 function catFromDonut(cat){activeCat=cat;activeMonth='all';mobGo('txns');document.querySelectorAll('.month-tab').forEach(b=>b.classList.toggle('on',b.textContent==='Todo'));buildCatFilter();renderTxFull();}
 
+let txQuery='';
+function txSearchFn(v){txQuery=v;renderTxFull();}
 function renderTxFull(){
   buildCatFilter();
   let txs=activeMonth==='all'?TXS:TXS.filter(t=>(t.fecha||'').slice(5,7)===activeMonth);
   if(activeCat!=='all')txs=txs.filter(t=>t.categoria===activeCat);
+  const q=(txQuery||'').trim().toLowerCase();
+  if(q)txs=txs.filter(t=>((t.descripcion||'')+' '+(t.categoria||'')+' '+(t.cuenta||'')).toLowerCase().includes(q));
   const h=txs.map(t=>txRow(t,'20px')).join('');
   const empty='<div style="padding:30px;text-align:center;color:var(--text2);font-size:12px">Sin transacciones</div>';
   const df=document.getElementById('dsTxFull');if(df)df.innerHTML=h||empty;
@@ -1033,7 +1046,25 @@ function renderInvest(){
   const de=document.getElementById('mobDeudas');
   if(de)de.innerHTML=deudas.map((d,i)=>`<div style="display:flex;justify-content:space-between;align-items:center;padding:11px 15px${i<deudas.length-1?';border-bottom:1px solid var(--border)':''}"><div style="display:flex;align-items:center;gap:9px"><div style="width:30px;height:30px;border-radius:9px;background:var(--s3);display:flex;align-items:center;justify-content:center">${i3d(d.ico)}</div><div><div style="font-size:12px;font-weight:600">${d.nom}</div><div style="font-size:9px;color:var(--text2)">${d.sub}</div></div></div><div style="font-size:13px;font-weight:800;color:${d.col}">$${d.monto.toLocaleString('es-CL')}</div></div>`).join('');
 }
-function renderAll(){renderCards();renderTxPrev();renderMetas();renderAccounts();renderDivisas();renderInvest();buildCatGrids();buildQuickBtns();initCharts();}
+// Resumen inteligente (usa tus ingresos como ancla + ritmo de metas → contraste y aversión a la pérdida)
+function renderInsight(){
+  const el=document.getElementById('mobInsight');if(!el)return;
+  const jul=TXS.filter(t=>t.fecha?.startsWith('2026-07')&&isReal(t));
+  const ing=jul.filter(t=>t.tipo==='income').reduce((s,t)=>s+t.monto,0);
+  const gas=jul.filter(t=>t.tipo==='expense').reduce((s,t)=>s+t.monto,0);
+  const base=ing||2550000;
+  const cats={};jul.filter(t=>t.tipo==='expense').forEach(t=>{cats[t.categoria]=(cats[t.categoria]||0)+t.monto;});
+  const top=Object.entries(cats).sort((a,b)=>b[1]-a[1])[0];
+  const items=[];
+  if(gas>ing)items.push({i:'⚠️',t:`Gastaste <b>${fmtK(gas-ing)}</b> más de lo que entró este mes.`});
+  else items.push({i:'✅',t:`Vas positivo: neto <b>+${fmtK(ing-gas)}</b> en julio.`});
+  if(top)items.push({i:'📊',t:`Tu mayor gasto es <b>${top[0]}</b> (${fmtK(top[1])}) — el <b>${Math.round(top[1]/base*100)}%</b> de tus ingresos.`});
+  const mc=METAS.find(m=>m.id==='china');
+  if(mc){const falta=mc.objetivo-mc.actual;const meses=mc.mensual>0?Math.ceil(falta/mc.mensual):null;
+    if(falta>0&&meses)items.push({i:'✈️',t:`Viaje China: te faltan <b>${fmtK(falta)}</b> · ~<b>${meses} meses</b> a tu ritmo.`});}
+  el.innerHTML=items.map(x=>`<div class="ins-row"><span class="ins-ico">${x.i}</span><span class="ins-txt">${x.t}</span></div>`).join('');
+}
+function renderAll(){renderCards();renderTxPrev();renderMetas();renderAccounts();renderDivisas();renderInvest();renderInsight();buildCatGrids();buildQuickBtns();initCharts();}
 
 function setupRealtime(){
   sb.channel('ch')
@@ -1052,4 +1083,4 @@ async function init(){
 window.addEventListener('DOMContentLoaded',init);
 </script>
 </body>
-</html> 
+</html>
