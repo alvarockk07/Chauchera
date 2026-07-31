@@ -105,6 +105,12 @@ html,body{font-family:'Satoshi',-apple-system,sans-serif;background:var(--bg);co
 .add-amt-lbl{font-size:9px;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:1px;margin-bottom:5px;}
 .add-amt-val{font-size:34px;font-weight:800;background:linear-gradient(135deg,#FFF,var(--yellow));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:-1px;}
 .month-tabs{display:flex;gap:6px;padding:10px 20px 0;overflow-x:auto;scrollbar-width:none;}.month-tabs::-webkit-scrollbar{display:none;}
+.cat-filter{display:flex;gap:7px;padding:10px 20px 2px;overflow-x:auto;scrollbar-width:none;}.cat-filter::-webkit-scrollbar{display:none;}
+.catf{display:inline-flex;align-items:center;gap:5px;padding:6px 12px;border-radius:20px;font-size:11px;font-weight:600;white-space:nowrap;background:var(--s2);color:var(--text2);border:1px solid var(--border);cursor:pointer;flex-shrink:0;transition:all .12s;}
+.catf .e3{width:15px;height:15px;vertical-align:-2px;}
+.catf.on{background:linear-gradient(135deg,var(--orange),var(--orange2));color:#fff;border-color:transparent;}
+.tx-tot{display:flex;justify-content:space-between;align-items:center;padding:8px 20px 4px;font-size:12px;}
+.tx-tot b{font-size:15px;font-weight:800;letter-spacing:-.3px;}
 .month-tab{padding:5px 12px;border-radius:20px;font-size:10px;font-weight:600;font-family:'Satoshi',sans-serif;cursor:pointer;white-space:nowrap;background:var(--s2);color:var(--text2);border:1px solid var(--border);transition:all .15s;flex-shrink:0;}.month-tab.on{background:var(--orange);color:#fff;border-color:var(--orange);}
 .sub-card{display:flex;align-items:center;gap:10px;padding:11px 20px;border-bottom:1px solid var(--border);}.sub-card:last-child{border-bottom:none;}
 .sub-ico{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;background:var(--s3);border:1px solid var(--border);flex-shrink:0;}
@@ -298,7 +304,7 @@ html,body{font-family:'Satoshi',-apple-system,sans-serif;background:var(--bg);co
 
 <!-- MOBILE -->
 <div class="mobile">
-<div class="mob-status"><div class="mob-time" id="mobClock">9:41</div><div style="font-size:10px;color:var(--text2)" id="mobConn">●</div></div>
+<div class="mob-status"><div class="mob-time" id="mobClock">9:41</div></div>
 <div class="mob-scroll" id="mobScroll">
   <!-- HOME -->
   <div class="view on" id="mob-home">
@@ -345,21 +351,9 @@ html,body{font-family:'Satoshi',-apple-system,sans-serif;background:var(--bg);co
   <div class="view" id="mob-txns">
     <div style="padding:16px 20px 0;display:flex;justify-content:space-between;align-items:center"><div style="font-size:19px;font-weight:800">Transacciones</div><button onclick="mobGo('add')" style="padding:6px 13px;border-radius:8px;border:none;background:var(--orange);color:#fff;font-size:10px;font-weight:700;font-family:'Satoshi',sans-serif;cursor:pointer">＋ Nueva</button></div>
     <div class="month-tabs"><div class="month-tab on" onclick="filterMonth(this,'07')">Julio</div><div class="month-tab" onclick="filterMonth(this,'06')">Junio</div><div class="month-tab" onclick="filterMonth(this,'all')">Todo</div></div>
-    <div style="height:8px"></div>
+    <div class="cat-filter" id="mobCatFilter"></div>
+    <div class="tx-tot" id="mobTxTot"></div>
     <div class="tx-list" id="mobTxFull"><div class="loading"><div class="spin"></div></div></div>
-    <div style="height:8px"></div>
-  </div>
-  <!-- METAS -->
-  <div class="view" id="mob-metas">
-    <div style="padding:16px 20px 0"><div style="font-size:19px;font-weight:800">Mis metas</div><div style="font-size:10px;color:var(--text2);margin-top:2px">Toca para editar</div></div>
-    <div style="height:12px"></div>
-    <div id="mobMetaCards"></div>
-    <div class="sec-hdr"><span class="sec-title">Deudas activas</span></div>
-    <div style="margin:0 20px;background:var(--s2);border-radius:var(--r);border:1px solid var(--border);overflow:hidden">
-      <div style="display:flex;justify-content:space-between;padding:11px 15px;border-bottom:1px solid var(--border)"><div><div style="font-size:12px;font-weight:600">👨‍👦 Deuda papá</div><div style="font-size:10px;color:var(--text2);margin-top:1px">$500K/mes · 7 cuotas</div></div><div style="font-size:13px;font-weight:700;color:var(--red)">$3.500.000</div></div>
-      <div style="display:flex;justify-content:space-between;padding:11px 15px;border-bottom:1px solid var(--border)"><div><div style="font-size:12px;font-weight:600">✈️ Viaje China</div><div style="font-size:10px;color:var(--text2);margin-top:1px">Falta por pagar</div></div><div style="font-size:13px;font-weight:700;color:var(--red)">$1.656.049</div></div>
-      <div style="display:flex;justify-content:space-between;padding:11px 15px"><div><div style="font-size:12px;font-weight:600">🎒 Mochila Ofki 3/3</div><div style="font-size:10px;color:var(--text2);margin-top:1px">Última cuota</div></div><div style="font-size:13px;font-weight:700;color:var(--yellow)">~$95.583</div></div>
-    </div>
     <div style="height:8px"></div>
   </div>
   <!-- SUBS -->
@@ -385,12 +379,14 @@ html,body{font-family:'Satoshi',-apple-system,sans-serif;background:var(--bg);co
     </div>
     <div style="height:8px"></div>
   </div>
-  <!-- INVERSIONES (Racional) -->
+  <!-- INVERSIONES + METAS (Racional) -->
   <div class="view" id="mob-invest">
-    <div style="padding:16px 20px 0"><div style="font-size:19px;font-weight:800">Inversiones</div><div style="font-size:10px;color:var(--text2);margin-top:2px">Racional · actualizado hoy</div></div>
+    <div style="padding:16px 20px 0"><div style="font-size:19px;font-weight:800">Inversiones y metas</div><div style="font-size:10px;color:var(--text2);margin-top:2px">Racional · sincronizado con tus objetivos</div></div>
     <div style="padding:13px 20px 0"><div class="inv-hero"><div class="inv-hero-lbl">Total invertido</div><div class="inv-hero-val" id="invTotal">—</div><div class="inv-hero-chg" id="invChg">—</div></div></div>
-    <div class="sec-hdr"><span class="sec-title">Mis portafolios</span></div>
+    <div class="sec-hdr"><span class="sec-title">Portafolios y metas</span></div>
     <div class="inv-grid" id="mobInvGrid"></div>
+    <div class="sec-hdr"><span class="sec-title">Deudas activas</span></div>
+    <div id="mobDeudas" style="margin:0 20px;background:var(--s1);border-radius:16px;border:1px solid var(--border);overflow:hidden"></div>
     <div style="height:8px"></div>
   </div>
 </div>
@@ -398,8 +394,7 @@ html,body{font-family:'Satoshi',-apple-system,sans-serif;background:var(--bg);co
   <div class="mob-nav-item on" id="mn-home" onclick="mobGo('home')"><div class="mob-nav-ico" data-i="🏠"></div><div class="mob-nav-lbl">Inicio</div></div>
   <div class="mob-nav-item" id="mn-txns" onclick="mobGo('txns')"><div class="mob-nav-ico" data-i="🧾"></div><div class="mob-nav-lbl">Gastos</div></div>
   <div class="mob-nav-item" id="mn-add" onclick="mobGo('add')"><div class="mob-fab">＋</div><div class="mob-nav-lbl">Agregar</div></div>
-  <div class="mob-nav-item" id="mn-metas" onclick="mobGo('metas')"><div class="mob-nav-ico" data-i="🎯"></div><div class="mob-nav-lbl">Metas</div></div>
-  <div class="mob-nav-item" id="mn-invest" onclick="mobGo('invest')"><div class="mob-nav-ico" data-i="📈"></div><div class="mob-nav-lbl">Invers.</div></div>
+  <div class="mob-nav-item" id="mn-invest" onclick="mobGo('invest')"><div class="mob-nav-ico" data-i="📈"></div><div class="mob-nav-lbl">Inversiones</div></div>
 </div>
 </div>
 
@@ -465,25 +460,25 @@ const isReal=t=>t.categoria!=='Transferencia';
 
 // Cuentas: bal = saldo en su moneda nativa (cur). El patrimonio se calcula en CLP al cambio del día.
 const ACCS={
-  'Racional':{ico:'📈',color:'#7B6FFF',sub:'Stocks + DAP + portafolios',cur:'CLP',bal:2755945,inv:true},
-  'Santander Chile':{ico:'🔴',color:'#EC0000',sub:'Cuenta Más Lucas',cur:'CLP',bal:301835},
-  'Mercado Pago':{ico:'🟢',color:'#00A650',sub:'BICE 3.9% anual',cur:'CLP',bal:176866},
+  'Racional':{ico:'📈',color:'#7B6FFF',sub:'Stocks + DAP + portafolios',cur:'CLP',bal:2061356,inv:true},
+  'Santander Chile':{ico:'🔴',color:'#EC0000',sub:'Cuenta Más Lucas',cur:'CLP',bal:156835},
+  'Mercado Pago':{ico:'🟢',color:'#00A650',sub:'BICE 3.9% anual',cur:'CLP',bal:751},
   'Tenpo TC':{ico:'💳',color:'#1DB954',sub:'Tarjeta de crédito',cur:'CLP',bal:75547},
-  'Falabella':{ico:'🏦',color:'#CC0000',sub:'Débito Digital',cur:'CLP',bal:103467},
-  'Truist':{ico:'🏦',color:'#5B2A86',sub:'Checking USD · EE.UU.',cur:'USD',bal:419.98},
-  'Tenpo':{ico:'💚',color:'#1DB954',sub:'Vista',cur:'CLP',bal:525},
+  'Falabella':{ico:'🏦',color:'#CC0000',sub:'Débito Digital',cur:'CLP',bal:73872},
+  'Truist':{ico:'🏦',color:'#5B2A86',sub:'Checking USD · EE.UU.',cur:'USD',bal:6.06},
+  'Tenpo':{ico:'💚',color:'#1DB954',sub:'Vista',cur:'CLP',bal:807},
   'Santander España':{ico:'🇪🇸',color:'#EC0000',sub:'Cuenta EUR · España',cur:'EUR',bal:0},
 };
 const accClp=a=>Math.round(a.bal*(RATES[a.cur]||1));
 const patClp=()=>Object.values(ACCS).reduce((s,a)=>s+accClp(a),0);
 // Portafolios Racional (datos de hoy). Stocks/Billetera en USD -> se convierten a CLP al cambio del día.
 const RACIONAL=[
-  {ico:'🛋️',nom:'Casa',cur:'CLP',bal:985077,pct:12.68},
-  {ico:'💵',nom:'DAP',cur:'CLP',bal:542188,pct:20.27},
-  {ico:'🛡️',nom:'DAP Riesgo',cur:'CLP',bal:369149,pct:14.79},
-  {ico:'✈️',nom:'Próximo viaje',cur:'CLP',bal:270526,pct:0.67},
-  {ico:'💰',nom:'Salud',cur:'CLP',bal:200043,pct:0.58},
-  {ico:'📈',nom:'Stocks (VOO)',cur:'USD',bal:413.72,pct:20.88},
+  {ico:'💵',nom:'DAP',cur:'CLP',bal:545876,pct:21.08},
+  {ico:'🛡️',nom:'DAP Riesgo',cur:'CLP',bal:371656,pct:15.57},
+  {ico:'🛋️',nom:'Casa',cur:'CLP',bal:286809,pct:13.46},
+  {ico:'✈️',nom:'Próximo viaje',cur:'CLP',bal:272131,pct:1.27},
+  {ico:'💰',nom:'Salud',cur:'CLP',bal:201225,pct:1.18},
+  {ico:'📈',nom:'Stocks (VOO)',cur:'USD',bal:408.05,pct:19.22},
   {ico:'⚡',nom:'Billetera',cur:'USD',bal:1.94,pct:0},
 ];
 const pfClp=p=>Math.round(p.bal*(RATES[p.cur]||1));
@@ -686,12 +681,35 @@ function filterMonth(btn,mo){
   btn.classList.add('on');activeMonth=mo;renderTxFull();
 }
 
+let activeCat='all';
+// Chips de categoría en la vista Movimientos (interactivo: toca una categoría para ver solo esos gastos)
+function buildCatFilter(){
+  const el=document.getElementById('mobCatFilter');if(!el)return;
+  const chips=[{id:'all',ico:'',nom:'Todas'}].concat(CATS.map(c=>({id:c.id,ico:c.ico,nom:c.id})));
+  el.innerHTML=chips.map(c=>`<div class="catf${activeCat===c.id?' on':''}" onclick="filterCat('${c.id}')">${c.ico?i3d(c.ico):''}${c.nom}</div>`).join('');
+}
+function filterCat(id){activeCat=id;buildCatFilter();renderTxFull();}
+// Desde el donut de la home: tocar una categoría lleva a Movimientos filtrado
+function catFromDonut(cat){activeCat=cat;activeMonth='all';mobGo('txns');document.querySelectorAll('.month-tab').forEach(b=>b.classList.toggle('on',b.textContent==='Todo'));buildCatFilter();renderTxFull();}
+
 function renderTxFull(){
-  const txs=activeMonth==='all'?TXS:TXS.filter(t=>(t.fecha||'').slice(5,7)===activeMonth);
+  buildCatFilter();
+  let txs=activeMonth==='all'?TXS:TXS.filter(t=>(t.fecha||'').slice(5,7)===activeMonth);
+  if(activeCat!=='all')txs=txs.filter(t=>t.categoria===activeCat);
   const h=txs.map(t=>txRow(t,'20px')).join('');
   const empty='<div style="padding:30px;text-align:center;color:var(--text2);font-size:12px">Sin transacciones</div>';
   const df=document.getElementById('dsTxFull');if(df)df.innerHTML=h||empty;
   const mf=document.getElementById('mobTxFull');if(mf)mf.innerHTML=h||empty;
+  // total del filtro (excluye transferencias)
+  const tot=document.getElementById('mobTxTot');
+  if(tot){
+    const real=txs.filter(isReal);
+    const gas=real.filter(t=>t.tipo==='expense').reduce((s,t)=>s+t.monto,0);
+    const ing=real.filter(t=>t.tipo==='income').reduce((s,t)=>s+t.monto,0);
+    const lbl=activeCat==='all'?'Gastos del período':'Gastos en '+activeCat;
+    tot.innerHTML=`<span style="color:var(--text2)">${lbl} · ${txs.length} mov.</span><b style="color:var(--red)">-${fmt(gas)}</b>`;
+    if(ing>0&&activeCat==='all')tot.innerHTML=`<span style="color:var(--text2)">Neto · ${txs.length} mov.</span><b style="color:${ing-gas>=0?'var(--green)':'var(--red)'}">${ing-gas>=0?'+':'-'}${fmt(ing-gas)}</b>`;
+  }
 }
 
 function renderMetas(){
@@ -791,7 +809,7 @@ function initCharts(){
   if(donutM)donutM.destroy();const dme=document.getElementById('mobDonut');
   if(dme)donutM=new Chart(dme,{type:'doughnut',data:{labels:ce.map(c=>c[0]),datasets:[{data:ce.map(c=>c[1]),backgroundColor:ce.map(c=>ci(c[0]).color),borderWidth:0,hoverOffset:3}]},options:{cutout:'64%',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}}}});
   const leg=document.getElementById('mobDonutLeg');
-  if(leg)leg.innerHTML=ce.slice(0,6).map(c=>`<div class="leg-item"><div class="leg-dot" style="background:${ci(c[0]).color}"></div><div class="leg-name">${c[0]}</div><div class="leg-val">${fmtK(c[1])}</div></div>`).join('')||'<div style="font-size:11px;color:var(--text2)">Sin datos aún</div>';
+  if(leg)leg.innerHTML=ce.slice(0,6).map(c=>`<div class="leg-item" style="cursor:pointer" onclick="catFromDonut('${c[0]}')"><div class="leg-dot" style="background:${ci(c[0]).color}"></div><div class="leg-name">${c[0]}</div><div class="leg-val">${fmtK(c[1])} ›</div></div>`).join('')||'<div style="font-size:11px;color:var(--text2)">Sin datos aún</div>';
   const totCat=Object.values(cats).reduce((s2,v)=>s2+v,0);
   const dt=document.getElementById('mobDonutTot');if(dt)dt.textContent=fmtK(totCat);
 }
@@ -939,6 +957,8 @@ function loadF(e,px){const f=e.target.files[0];if(!f)return;const r=new FileRead
 function tick(){const n=new Date();const c=document.getElementById('mobClock');if(c)c.textContent=n.getHours()+':'+(n.getMinutes()<10?'0':'')+n.getMinutes();}
 setInterval(tick,1000);tick();
 
+// Vincula portafolios Racional con metas financieras (progreso automático según el valor del portafolio)
+const PF_GOAL={'Casa':'casa','Próximo viaje':'china','Salud':'salud'};
 function renderInvest(){
   const total=RACIONAL.reduce((s,p)=>s+pfClp(p),0);
   const wpct=RACIONAL.reduce((s,p)=>s+pfClp(p)*p.pct,0)/(total||1);
@@ -947,7 +967,11 @@ function renderInvest(){
     const nat=p.cur==='CLP'?'$'+p.bal.toLocaleString('es-CL'):'US$'+p.bal.toLocaleString('es-CL',{maximumFractionDigits:2});
     const sub=p.cur==='CLP'?'':'≈ $'+clp.toLocaleString('es-CL');
     const chg=p.pct?`<div class="pf-chg">↗ +${p.pct.toFixed(2)}%</div>`:'<div class="pf-chg" style="color:var(--text3);background:var(--s3)">—</div>';
-    return `<div class="pf-card"><div class="pf-top"><div class="pf-ico">${i3d(p.ico)}</div><div style="min-width:0"><div class="pf-name">${p.nom}</div></div></div><div class="pf-val">${nat}</div>${sub?`<div class="pf-sub">${sub}</div>`:''}${chg}</div>`;
+    let goal='';
+    const gid=PF_GOAL[p.nom];const m=gid?METAS.find(x=>x.id===gid):null;
+    if(m){const pr=Math.min(100,clp/m.objetivo*100);
+      goal=`<div style="margin-top:9px;padding-top:9px;border-top:1px solid var(--border)"><div style="display:flex;justify-content:space-between;font-size:9px;margin-bottom:4px"><span style="color:var(--orange);font-weight:700">🎯 ${m.nombre.replace(/^\S+\s/,'')}</span><span style="font-weight:800">${pr.toFixed(0)}%</span></div><div class="meta-track"><div class="meta-bar" style="width:${pr}%"></div></div><div style="font-size:8px;color:var(--text3);margin-top:3px">Meta $${(m.objetivo/1e6).toFixed(m.objetivo>=1e6?1:2)}M · ${m.eta||''}</div></div>`;}
+    return `<div class="pf-card"><div class="pf-top"><div class="pf-ico">${i3d(p.ico)}</div><div style="min-width:0"><div class="pf-name">${p.nom}</div></div></div><div class="pf-val">${nat}</div>${sub?`<div class="pf-sub">${sub}</div>`:''}${chg}${goal}</div>`;
   }).join('');
   const totTxt='$'+total.toLocaleString('es-CL');
   const chgTxt='↗ +'+wpct.toFixed(2)+'% ponderado';
@@ -956,6 +980,14 @@ function renderInvest(){
   const mc=document.getElementById('invChg');if(mc)mc.textContent=chgTxt;
   const dt=document.getElementById('dsInvTotal');if(dt)dt.textContent=totTxt;
   const dc=document.getElementById('dsInvChg');if(dc)dc.textContent=chgTxt;
+  // Deudas activas
+  const deudas=[
+    {ico:'👨‍👦',nom:'Deuda papá',sub:'$500K/mes · 7 cuotas',monto:3500000,col:'var(--red)'},
+    {ico:'✈️',nom:'Viaje China',sub:'Falta por pagar',monto:1656049,col:'var(--red)'},
+    {ico:'🎒',nom:'Mochila Ofki 3/3',sub:'Última cuota',monto:95583,col:'var(--yellow)'},
+  ];
+  const de=document.getElementById('mobDeudas');
+  if(de)de.innerHTML=deudas.map((d,i)=>`<div style="display:flex;justify-content:space-between;align-items:center;padding:11px 15px${i<deudas.length-1?';border-bottom:1px solid var(--border)':''}"><div style="display:flex;align-items:center;gap:9px"><div style="width:30px;height:30px;border-radius:9px;background:var(--s3);display:flex;align-items:center;justify-content:center">${i3d(d.ico)}</div><div><div style="font-size:12px;font-weight:600">${d.nom}</div><div style="font-size:9px;color:var(--text2)">${d.sub}</div></div></div><div style="font-size:13px;font-weight:800;color:${d.col}">$${d.monto.toLocaleString('es-CL')}</div></div>`).join('');
 }
 function renderAll(){renderCards();renderTxPrev();renderMetas();renderAccounts();renderDivisas();renderInvest();buildCatGrids();buildQuickBtns();initCharts();}
 
