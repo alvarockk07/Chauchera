@@ -203,6 +203,11 @@ html,body{font-family:'Satoshi',-apple-system,sans-serif;background:var(--bg);co
 .ins-row:last-child{border-bottom:none;}
 .ins-ico{font-size:16px;line-height:1.2;flex-shrink:0;}
 .ins-txt{color:var(--text);font-weight:500;line-height:1.35;}
+.mh-area{margin:0 20px;background:var(--s1);border:1px solid var(--border);border-radius:18px;padding:15px;}
+.mh-area-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;}
+.mh-area-lbl{font-size:10px;color:var(--text2);}
+.mh-area-val{font-size:21px;font-weight:800;letter-spacing:-.5px;color:var(--purple);}
+.mh-area-avg{font-size:14px;font-weight:700;color:var(--text);}
 .mh-sum{margin:16px 20px 0;background:var(--s1);border:1px solid var(--border);border-radius:18px;padding:15px;}
 .mh-sum-hdr{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:11px;}
 .mh-sum-ttl{font-size:11px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.6px;}
@@ -356,9 +361,15 @@ html,body{font-family:'Satoshi',-apple-system,sans-serif;background:var(--bg);co
     <!-- RESUMEN INTELIGENTE -->
     <div class="sec-hdr"><span class="sec-title">Resumen inteligente</span></div>
     <div class="mh-insight" id="mobInsight"></div>
-    <!-- UN GRÁFICO: gastos por categoría -->
-    <div class="sec-hdr"><span class="sec-title">Gastos por categoría</span><span class="sec-link" onclick="mobGo('txns')">Ver detalle →</span></div>
-    <div class="mh-donut"><div class="mh-donut-c"><canvas id="mobDonut"></canvas><div class="donut-center"><div class="donut-center-val" id="mobDonutTot">—</div><div class="donut-center-lbl">gastado</div></div></div><div class="mh-donut-leg" id="mobDonutLeg"></div></div>
+    <!-- GRÁFICO DE ÁREA: gasto por mes -->
+    <div class="sec-hdr"><span class="sec-title">Gasto por mes</span><span class="sec-link" onclick="mobGo('txns')">Ver detalle →</span></div>
+    <div class="mh-area">
+      <div class="mh-area-top">
+        <div><div class="mh-area-lbl">Gasto de este mes</div><div class="mh-area-val" id="areaVal">—</div></div>
+        <div style="text-align:right"><div class="mh-area-lbl">Promedio</div><div class="mh-area-avg" id="areaAvg">—</div></div>
+      </div>
+      <canvas id="mobArea" height="150"></canvas>
+    </div>
     <div style="height:8px"></div>
   </div>
   <!-- BALANCES / CUENTAS -->
@@ -448,6 +459,19 @@ html,body{font-family:'Satoshi',-apple-system,sans-serif;background:var(--bg);co
       <div class="field-row2"><div><div class="field-lbl">Categoría</div><select class="field-inp" id="etCat"></select></div><div><div class="field-lbl">Cuenta</div><select class="field-inp" id="etAcc" onchange="etAccChange()"></select></div></div>
       <label style="display:flex;align-items:center;gap:9px;padding:11px 13px;background:var(--s2);border-radius:var(--r-sm);border:1px solid var(--border);cursor:pointer"><span style="font-size:11px;font-weight:500;flex:1">🔄 Suscripción fija</span><label class="toggle"><input type="checkbox" id="etFixed"><div class="toggle-track"></div><div class="toggle-thumb"></div></label></label>
       <button class="save-btn" onclick="saveTxEdit()">Guardar cambios</button>
+    </div>
+  </div>
+</div>
+<!-- EDIT SALDO CUENTA MODAL -->
+<div class="modal" id="balModal" onclick="if(event.target.classList.contains('modal-overlay')||event.target===this)closeBalModal()">
+  <div class="modal-overlay"></div>
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div style="font-size:15px;font-weight:700;margin-bottom:4px" id="balModalTitle">Editar saldo</div>
+    <div style="font-size:11px;color:var(--text2);margin-bottom:14px" id="balModalSub">Ajusta el saldo actual de la cuenta</div>
+    <div style="display:flex;flex-direction:column;gap:11px">
+      <div><div class="field-lbl" id="balModalLbl">Saldo</div><input type="number" step="any" class="field-inp" id="balModalInput"></div>
+      <button class="save-btn" onclick="saveBal()">Guardar saldo</button>
     </div>
   </div>
 </div>
@@ -788,7 +812,7 @@ function renderAccounts(){
     const balSub=a.cur==='CLP'?a.sub:'≈ '+fmt(clp);
     const invTag=a.inv?'<span class="acc-cur-badge" style="background:rgba(123,111,255,.15);color:var(--purple)">INVERSIÓN</span>':'';
     const dom=ACC_DOM[k];
-    return `<div class="acc-row"><div class="acc-row-ico" style="background:${dom?'#fff':a.color+'22'};${dom?'padding:5px;box-shadow:inset 0 0 0 1px var(--border)':''}">${accIcon(k,a.ico)}</div><div style="flex:1;min-width:0"><div class="acc-row-name">${k}<span class="acc-cur-badge">${a.cur}</span>${invTag}</div><div class="acc-row-sub">${a.sub}</div></div><div class="acc-row-bal"><div class="acc-row-bal-main">${balMain}</div><div class="acc-row-bal-sub">${balSub}</div></div></div>`;
+    return `<div class="acc-row" onclick="openBal('${k}')" style="cursor:pointer"><div class="acc-row-ico" style="background:${dom?'#fff':a.color+'22'};${dom?'padding:5px;box-shadow:inset 0 0 0 1px var(--border)':''}">${accIcon(k,a.ico)}</div><div style="flex:1;min-width:0"><div class="acc-row-name">${k}<span class="acc-cur-badge">${a.cur}</span>${invTag}</div><div class="acc-row-sub">${a.sub}</div></div><div class="acc-row-bal"><div class="acc-row-bal-main">${balMain}</div><div class="acc-row-bal-sub">${balSub}</div></div></div>`;
   }).join('');
 }
 
@@ -843,7 +867,7 @@ function selCat(id,px,grid){
   event.currentTarget.classList.add('sel');
 }
 
-let barDs,barM,donutDs,donutM;
+let barDs,barM,donutDs,donutM,areaChart;
 function initCharts(){
   const mos={};TXS.forEach(t=>{if(!isReal(t))return;const mo=(t.fecha||'').slice(0,7);if(!mo)return;if(!mos[mo])mos[mo]={i:0,g:0};if(t.tipo==='income')mos[mo].i+=t.monto;else mos[mo].g+=t.monto;});
   const s=Object.keys(mos).sort();
@@ -856,6 +880,15 @@ function initCharts(){
   if(barM)barM.destroy();const me=document.getElementById('mobBar');
   const optM={responsive:true,maintainAspectRatio:true,onHover:(e,els)=>{e.native.target.style.cursor=els.length?'pointer':'default';},onClick:(e,els)=>{if(els&&els.length){const key=s[els[0].index];if(key){activeMonth=key.slice(5);activeCat='all';mobGo('txns');document.querySelectorAll('.month-tab').forEach(b=>b.classList.remove('on'));renderTxFull();toast('📊 '+mn[parseInt(key.slice(5))-1]+' '+key.slice(0,4));}}},plugins:{legend:{align:'start',labels:{color:tc,font:{size:9,family:'Satoshi'},boxWidth:8,boxHeight:8,padding:10,usePointStyle:true,pointStyle:'circle'}}},scales:{x:{grid:{display:false},ticks:{color:tc,font:{size:9}}},y:{grid:{color:'rgba(0,0,0,.05)'},border:{display:false},ticks:{color:'#A3A4B0',font:{size:8},callback:v=>'$'+(v>=1e6?(v/1e6).toFixed(1)+'M':(v/1e3).toFixed(0)+'K')}}}};
   if(me)barM=new Chart(me,{type:'bar',data:{labels,datasets:[{label:'Ingresos',data:s.map(m=>mos[m].i),backgroundColor:'rgba(124,92,252,.9)',borderRadius:5,borderSkipped:false},{label:'Gastos',data:s.map(m=>mos[m].g),backgroundColor:'rgba(124,92,252,.9)',borderRadius:5,borderSkipped:false}]},options:optM});
+  // Gráfico de área: gasto por mes
+  if(areaChart)areaChart.destroy();const ac=document.getElementById('mobArea');
+  if(ac){const ctx=ac.getContext('2d');const grad=ctx.createLinearGradient(0,0,0,150);grad.addColorStop(0,'rgba(124,92,252,.32)');grad.addColorStop(1,'rgba(124,92,252,0)');
+    const gastos=s.map(m=>mos[m].g);
+    areaChart=new Chart(ac,{type:'line',data:{labels,datasets:[{data:gastos,borderColor:'#7C5CFC',borderWidth:2.5,fill:true,backgroundColor:grad,tension:.4,pointRadius:gastos.map((v,i)=>i===gastos.length-1?5:0),pointHoverRadius:6,pointBackgroundColor:'#7C5CFC',pointBorderColor:'#fff',pointBorderWidth:2}]},options:{responsive:true,maintainAspectRatio:true,onHover:(e,el)=>{e.native.target.style.cursor=el.length?'pointer':'default';},onClick:(e,el)=>{if(el&&el.length){const key=s[el[0].index];if(key){activeMonth=key.slice(5);activeCat='all';mobGo('txns');document.querySelectorAll('.month-tab').forEach(b=>b.classList.remove('on'));renderTxFull();toast('📉 '+mn[parseInt(key.slice(5))-1]);}}},plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>' '+fmt(c.raw)}}},scales:{x:{grid:{display:false},ticks:{color:tc,font:{size:9}}},y:{display:false,beginAtZero:true}}}});
+    const last=gastos.length?gastos[gastos.length-1]:0;const avg=gastos.length?gastos.reduce((a,b)=>a+b,0)/gastos.length:0;
+    const av=document.getElementById('areaVal');if(av)av.textContent=fmt(last);
+    const ag=document.getElementById('areaAvg');if(ag)ag.textContent=fmt(Math.round(avg));
+  }
   const cats={};TXS.filter(t=>t.tipo==='expense'&&isReal(t)).forEach(t=>{cats[t.categoria]=(cats[t.categoria]||0)+t.monto;});
   const ce=Object.entries(cats).sort((a,b)=>b[1]-a[1]).slice(0,7);
   if(donutDs)donutDs.destroy();const doe=document.getElementById('dsDonut');
@@ -1045,6 +1078,26 @@ function renderInvest(){
   ];
   const de=document.getElementById('mobDeudas');
   if(de)de.innerHTML=deudas.map((d,i)=>`<div style="display:flex;justify-content:space-between;align-items:center;padding:11px 15px${i<deudas.length-1?';border-bottom:1px solid var(--border)':''}"><div style="display:flex;align-items:center;gap:9px"><div style="width:30px;height:30px;border-radius:9px;background:var(--s3);display:flex;align-items:center;justify-content:center">${i3d(d.ico)}</div><div><div style="font-size:12px;font-weight:600">${d.nom}</div><div style="font-size:9px;color:var(--text2)">${d.sub}</div></div></div><div style="font-size:13px;font-weight:800;color:${d.col}">$${d.monto.toLocaleString('es-CL')}</div></div>`).join('');
+}
+// Editar saldo de cuenta (persiste en tabla cuentas)
+let editBalAcc=null;
+function openBal(name){
+  const a=ACCS[name];if(!a)return;editBalAcc=name;
+  document.getElementById('balModalTitle').textContent='Saldo · '+name;
+  document.getElementById('balModalSub').textContent=a.cur==='CLP'?'Ajusta el saldo actual en CLP':`Ajusta el saldo actual en ${a.cur}`;
+  document.getElementById('balModalLbl').textContent='Saldo '+a.cur;
+  document.getElementById('balModalInput').value=a.bal;
+  document.getElementById('balModal').classList.add('on');
+}
+function closeBalModal(){document.getElementById('balModal').classList.remove('on');editBalAcc=null;}
+async function saveBal(){
+  if(!editBalAcc)return;const name=editBalAcc;
+  const v=parseFloat(document.getElementById('balModalInput').value);
+  if(isNaN(v)){toast('⚠ Ingresa un monto');return;}
+  ACCS[name].bal=v;
+  try{const{error}=await sb.from('cuentas').update({saldo:v,updated_at:new Date().toISOString()}).eq('nombre',name);if(error)throw error;
+    closeBalModal();renderAll();toast('✓ Saldo actualizado');
+  }catch{toast('⚠ Error al guardar');}
 }
 // Resumen inteligente (usa tus ingresos como ancla + ritmo de metas → contraste y aversión a la pérdida)
 function renderInsight(){
