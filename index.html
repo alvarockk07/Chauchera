@@ -266,6 +266,71 @@ html,body{font-family:'Satoshi',-apple-system,sans-serif;background:var(--bg);co
 .cat-chip-ico .e3{width:22px;height:22px;vertical-align:middle;}
 @media(min-width:769px){.desktop{display:flex;}.mobile{display:none!important;}.toast{bottom:20px;}}
 @media(max-width:768px){.desktop{display:none!important;}.mobile{display:flex;}.cards-grid{grid-template-columns:1fr 1fr;gap:9px;}.card{padding:13px;}.card-val{font-size:16px;}.row2,.row2b{grid-template-columns:1fr;}}
+
+/* ============ APPLE DESIGN · MOVIMIENTO FLUIDO, MATERIALES Y PROFUNDIDAD ============ */
+:root{
+  --spring:cubic-bezier(.32,.72,0,1);        /* asentamiento tipo iOS, sin latencia */
+  --ease-out:cubic-bezier(.16,1,.3,1);
+  --shadow-sm:0 1px 2px rgba(22,22,44,.04),0 3px 8px rgba(22,22,44,.035);
+  --shadow-md:0 2px 6px rgba(22,22,44,.05),0 14px 30px rgba(22,22,44,.06);
+}
+body{font-optical-sizing:auto;text-rendering:optimizeLegibility;}
+.mh-bal-big,.mh-bal,.bal-hero-val,.inv-hero-val,.add-amt-val,.pf-val,.inv-val,.card-val{font-optical-sizing:auto;}
+
+/* Las vistas se "materializan": aparecen con opacidad + leve ascenso + escala, con spring */
+.view.on{animation:viewIn .42s var(--spring) both;}
+@keyframes viewIn{from{opacity:0;transform:translateY(10px) scale(.985);}to{opacity:1;transform:none;}}
+
+/* Feedback en el press (instantáneo, 1:1) — Apple: responder al tacto, no al release */
+.mh-stat,.inv-card,.acc-row,.div-chip,.tx-item,.card,.panel,.pf-card,.meta-card,.sub-card,
+.mh-donut,.mh-area,.mh-sum,.mh-insight,.mh-ia,.catf,.crg,.cm-btn,.month-tab,.ai-chip,.cur-seg,.mh-act2,.mh-act{
+  transition:transform .18s var(--spring),box-shadow .25s var(--ease-out),background .15s,border-color .15s,color .15s;
+}
+.mh-stat:active,.inv-card:active,.acc-row:active,.div-chip:active,.card:active,
+.pf-card:active,.tx-item:active,.sub-card:active,.meta-card:active{transform:scale(.975);}
+
+/* Profundidad suave (refs: tarjetas flotantes translúcidas) */
+.mh-stat,.inv-card,.acc-row,.div-chip,.pf-card,.card,.panel,.bal-hero,.inv-hero,.mh-search input{box-shadow:var(--shadow-sm);}
+.mh-donut,.mh-area,.mh-sum,.mh-insight,.mh-ia{box-shadow:var(--shadow-md);}
+.mh-bal-card{border:1px solid rgba(255,255,255,.14);box-shadow:0 16px 36px rgba(108,92,231,.32),0 3px 10px rgba(108,92,231,.16);}
+
+/* Elevación al hover en dispositivos con puntero */
+@media(hover:hover){
+  .inv-card:hover,.acc-row:hover,.pf-card:hover,.div-chip:hover,.mh-stat:hover{box-shadow:var(--shadow-md);transform:translateY(-1px);}
+}
+
+/* Modal: la hoja "llega" como material (sube con spring); overlay funde. Origen anclado abajo */
+.modal.on .modal-overlay{animation:ovIn .3s var(--ease-out) both;}
+.modal.on .modal-sheet{animation:sheetUp .5s var(--spring) both;will-change:transform;}
+@keyframes ovIn{from{opacity:0}to{opacity:1}}
+@keyframes sheetUp{from{transform:translateY(100%);}to{transform:translateY(0);}}
+.modal-sheet{box-shadow:0 -8px 40px rgba(22,22,44,.18);}
+
+/* Botones y FAB: press con escala spring */
+.save-btn,.mob-fab{transition:transform .16s var(--spring),opacity .15s,box-shadow .25s;}
+.save-btn:active{transform:scale(.98);}
+
+/* Nav inferior: ícono con pop spring */
+.mob-nav-ico{transition:transform .3s var(--spring);}
+.mob-nav-item.on .mob-nav-ico{transform:scale(1.14) translateY(-1px);}
+.mob-nav-item:active .mob-nav-ico{transform:scale(.9);}
+
+/* Barras de progreso: asentamiento spring */
+.meta-bar,.mh-sum-bar>div{transition:width .7s var(--spring)!important;}
+
+/* Reduced motion: cross-fade en vez de spring/slide (Apple §14) */
+@media(prefers-reduced-motion:reduce){
+  .view.on,.modal.on .modal-sheet{animation:fadeIn .2s ease both;}
+  @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+  .mh-stat:active,.inv-card:active,.acc-row:active,.card:active,.tx-item:active,
+  .pf-card:active,.div-chip:active,.sub-card:active,.meta-card:active{transform:none;}
+  html{scroll-behavior:auto;}
+}
+/* Reduced transparency: superficies más sólidas */
+@media(prefers-reduced-transparency:reduce){
+  .mob-nav{background:#fff;backdrop-filter:none;-webkit-backdrop-filter:none;}
+  .modal-overlay{backdrop-filter:none;background:rgba(0,0,0,.55);}
+}
 </style>
 </head>
 <body>
@@ -540,7 +605,7 @@ const ACCS={
   'Santander Chile':{ico:'🔴',color:'#EC0000',sub:'Cuenta Más Lucas',cur:'CLP',bal:156835},
   'Mercado Pago':{ico:'🟢',color:'#00A650',sub:'BICE 3.9% anual',cur:'CLP',bal:751},
   'Tenpo TC':{ico:'💳',color:'#1DB954',sub:'Tarjeta de crédito',cur:'CLP',bal:75547},
-  'Falabella':{ico:'🏦',color:'#CC0000',sub:'Débito Digital',cur:'CLP',bal:73872},
+  'Falabella':{ico:'🏦',color:'#CC0000',sub:'Débito Digital',cur:'CLP',bal:196312},
   'Truist':{ico:'🏦',color:'#5B2A86',sub:'Checking USD · EE.UU.',cur:'USD',bal:6.06},
   'Tenpo':{ico:'💚',color:'#1DB954',sub:'Vista',cur:'CLP',bal:807},
   'Santander España':{ico:'🇪🇸',color:'#EC0000',sub:'Cuenta EUR · España',cur:'EUR',bal:0},
@@ -584,7 +649,8 @@ const E3={
 };
 function i3d(e){const m=E3[e];if(!m)return e;const u=FLU+encodeURIComponent(m[0])+'/3D/'+m[1]+'_3d.png';return `<img class="e3" src="${u}" data-e="${e}" onerror="this.outerHTML=this.dataset.e" alt="">`;}
 function applyNavIcons(){document.querySelectorAll('[data-i]').forEach(el=>{el.innerHTML=i3d(el.getAttribute('data-i'));});}
-function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('on');setTimeout(()=>t.classList.remove('on'),2500);}
+function hap(ms){try{navigator.vibrate&&navigator.vibrate(ms)}catch(e){}}
+function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('on');hap(12);setTimeout(()=>t.classList.remove('on'),2500);}
 
 function setConn(ok){
   const d=document.getElementById('syncDot');const l=document.getElementById('syncLbl');
@@ -614,7 +680,7 @@ async function fetchAll(){
   }catch{setConn(false);toast('⚠ Error al conectar');}
 }
 
-const DS_PG={home:{t:'Dashboard',s:'Resumen · Julio 2026'},txns:{t:'Transacciones',s:'Historial completo'},metas:{t:'Metas',s:'Progreso y objetivos'},subs:{t:'Suscripciones',s:'Gastos recurrentes'},add:{t:'Agregar',s:'Nueva transacción'},invest:{t:'Inversiones',s:'Racional · portafolios'}};
+const DS_PG={home:{t:'Dashboard',s:'Resumen · '+curMesNom+' '+CURMONTH.slice(0,4)},txns:{t:'Transacciones',s:'Historial completo'},metas:{t:'Metas',s:'Progreso y objetivos'},subs:{t:'Suscripciones',s:'Gastos recurrentes'},add:{t:'Agregar',s:'Nueva transacción'},invest:{t:'Inversiones',s:'Racional · portafolios'}};
 
 function dsGo(id,el){
   document.querySelectorAll('.ds-main .view').forEach(v=>v.classList.remove('on'));
@@ -633,6 +699,7 @@ function mobGo(id){
   document.querySelectorAll('.mob-nav-item').forEach(n=>n.classList.remove('on'));
   document.getElementById('mob-'+id)?.classList.add('on');
   document.getElementById('mn-'+id)?.classList.add('on');
+  hap(6);
   document.getElementById('mobScroll').scrollTop=0;
   if(id==='txns')renderTxFull();
   if(id==='subs')renderSubs();
