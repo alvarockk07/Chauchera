@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es-CL">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,maximum-scale=1,user-scalable=no">
@@ -355,6 +355,34 @@ svg{display:block} button{font:inherit;color:inherit;border:0;background:none;cu
 .note b{color:var(--ink-2);font-weight:700}
 @media(min-width:900px){ .note{max-width:none;padding-left:268px} }
 
+/* --- moneda del saldo y edición de movimientos --- */
+.cur{display:inline-flex;align-items:center;gap:4px;margin-left:7px;vertical-align:middle;
+  padding:3px 8px 3px 9px;border:0;border-radius:999px;cursor:pointer;font-family:inherit;
+  font-size:10.5px;font-weight:800;letter-spacing:.04em;
+  background:rgba(255,255,255,.16);color:var(--hero-ink);
+  transition:transform .2s var(--spring),background .25s}
+.cur:hover{background:rgba(255,255,255,.26)}
+.cur:active{transform:scale(.93)}
+
+.row.tap{cursor:pointer;border-radius:var(--r-sm);
+  transition:background .2s,transform .18s var(--spring)}
+.row.tap:active{transform:scale(.985);background:var(--canvas)}
+@media(hover:hover){ .row.tap:hover{background:var(--canvas)} }
+
+#shFecha{color:var(--ink);font-weight:600;text-align:left}
+#shFecha::-webkit-calendar-picker-indicator{opacity:.5;cursor:pointer}
+
+.borrar{width:100%;margin-top:9px;padding:13px 16px;border:0;border-radius:var(--r);
+  cursor:pointer;font-family:inherit;font-size:14.5px;font-weight:700;letter-spacing:-.018em;
+  background:transparent;color:var(--out-ink);
+  transition:background .25s,color .25s,transform .2s var(--spring)}
+.borrar:active{transform:scale(.98)}
+.borrar.arm{background:#BE3E15;color:#fff}
+@media (prefers-color-scheme:dark){ :root:not([data-theme="light"]) .borrar.arm{background:#FF8F69;color:#2A0F06} }
+:root[data-theme="dark"] .borrar.arm{background:#FF8F69;color:#2A0F06}
+:root[data-theme="light"] .borrar.arm{background:#BE3E15;color:#fff}
+@media(hover:hover){ .borrar:not(.arm):hover{background:var(--out-t)} .borrar.arm:hover{filter:brightness(1.06)} }
+
 /* --- colores de los iconos de inversión --- */
 :root{
   --c-plazo:#019a46; --t-plazo:#d9f6dd;
@@ -461,7 +489,7 @@ svg{display:block} button{font:inherit;color:inherit;border:0;background:none;cu
       <div class="hero-mk"><svg viewBox="0 0 32 32" fill="none" width="18" height="18"><path d="M16 3.6a12.4 12.4 0 1 0 10.4 5.6" stroke="currentColor" stroke-width="4.2" stroke-linecap="round"/><circle cx="25.1" cy="6.7" r="3.4" fill="currentColor"/></svg><span id="saludo">Hola</span></div>
       <div class="hero-ib" id="eye" title="Ocultar saldo"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M2.2 12S5.8 5.5 12 5.5 21.8 12 21.8 12 18.2 18.5 12 18.5 2.2 12 2.2 12"/><circle cx="12" cy="12" r="3.1"/></svg></div>
     </div>
-    <div class="hero-l">Disponible</div>
+    <div class="hero-l">Disponible <button class="cur" id="curBtn" type="button" aria-label="Cambiar moneda"><span id="curTxt">CLP</span><svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8.5h13l-3-3"/><path d="M20 15.5H7l3 3"/></svg></button></div>
     <div class="hero-n num" id="bal" data-v="0">$0</div>
     <div class="hero-sp">
       <div><div class="hs-l"><span class="hs-d" style="background:var(--in)"></span><span id="inL">Entró</span></div>
@@ -510,7 +538,7 @@ svg{display:block} button{font:inherit;color:inherit;border:0;background:none;cu
 <section class="view" id="cta">
   <div class="hero-p"><div class="hero">
     <div class="hero-top"><div class="hero-mk"><svg viewBox="0 0 32 32" fill="none" width="18" height="18"><path d="M16 3.6a12.4 12.4 0 1 0 10.4 5.6" stroke="currentColor" stroke-width="4.2" stroke-linecap="round"/><circle cx="25.1" cy="6.7" r="3.4" fill="currentColor"/></svg><span>Cuentas</span></div></div>
-    <div class="hero-l">Patrimonio</div>
+    <div class="hero-l">Patrimonio <button class="cur" id="curBtn2" type="button" aria-label="Cambiar moneda"><span id="curTxt2">CLP</span><svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8.5h13l-3-3"/><path d="M20 15.5H7l3 3"/></svg></button></div>
     <div class="hero-n num" id="patV">$0</div>
     <div class="hero-sp">
       <div><div class="hs-l">Disponible</div><div class="hs-v num" id="dispV">$0</div></div>
@@ -552,7 +580,7 @@ svg{display:block} button{font:inherit;color:inherit;border:0;background:none;cu
 <div class="sheet-bg" id="shBg"></div>
 <div class="sheet" id="sheet">
   <div class="sheet-g" id="shGrab"></div>
-  <h3>Nuevo movimiento</h3>
+  <h3 id="shTit">Nuevo movimiento</h3>
   <div class="amt num" id="amt">$0</div>
   <div class="amt-h" id="amtH">—</div>
   <div class="tt"><button class="tt-b exp on" data-t="expense">Gasto</button>
@@ -560,8 +588,10 @@ svg{display:block} button{font:inherit;color:inherit;border:0;background:none;cu
   <select class="acc-sel" id="shAcc"></select>
   <div class="cats" id="cats"></div>
   <input id="shDesc" class="acc-sel" style="text-align:left" placeholder="Descripción (ej. Café con José)">
+  <input id="shFecha" class="acc-sel" type="date">
   <div class="pad" id="pad"></div>
   <button class="save" id="save">Guardar</button>
+  <button class="borrar" id="borrar" type="button" hidden>Borrar movimiento</button>
 </div>
 <div class="toast" id="toast"></div>
 
@@ -581,6 +611,9 @@ var ACC={"Racional": {"cur": "CLP", "sub": "Stocks · DAP · portafolios", "inv"
 var CATS=["Comida", "Supermercado", "Café", "Transporte", "Servicios", "Personal", "Salud", "Deuda", "Ingreso", "Transferencia"];                       /* orden para la hoja de agregar */
 var DIV={CLP:'$',USD:'US$',EUR:'€'};
 var RATES={CLP:1,USD:940,EUR:1090};
+var MONS=['CLP','USD','EUR'];
+var MON=(function(){ try{ var v=localStorage.getItem('chauchera.moneda');
+  return MONS.indexOf(v)>-1?v:'CLP'; }catch(e){ return 'CLP'; } })();
 
 /* ===================== estado ===================== */
 var TXS=[],CUENTAS=[],PF=[],DEUDAS=[],METAS=[],RESUMEN=null,SESION=null;
@@ -591,6 +624,19 @@ var LS_C='chauchera.cache.v2', LS_Q='chauchera.cola.v2';
 /* ===================== utilidades ===================== */
 function vib(ms){ try{ navigator.vibrate && navigator.vibrate(ms); }catch(e){} }
 function fmt(n){ return '$'+Math.round(Math.abs(n)).toLocaleString('es-CL'); }
+/* fmtM: el mismo monto (guardado en CLP) mostrado en la moneda elegida arriba. */
+function deClp(clp,m){ var r=RATES[m||MON]||1; return clp/r; }
+function fmtM(clp,m){
+  m=m||MON;
+  if(m==='CLP') return fmt(clp);
+  var v=Math.abs(deClp(clp,m));
+  return (DIV[m]||'')+v.toLocaleString('es-CL',{minimumFractionDigits:2,maximumFractionDigits:2});
+}
+function cortoM(clp,m){
+  m=m||MON;
+  if(m==='CLP') return corto(clp);
+  return fmtM(clp,m);
+}
 function fmtS(n){ return (n<0?'−':'')+fmt(n); }
 function corto(n){ var a=Math.abs(n);
   if(a>=1e6) return '$'+(a/1e6).toFixed(2).replace('.',',')+'M';
@@ -627,10 +673,10 @@ function calc(){
 function countUp(el,v){
   el.dataset.v=v;
   if(oculto){ el.textContent='••••••'; return; }
-  if(RM){ el.textContent=fmt(v); return; }
+  if(RM){ el.textContent=fmtM(v); return; }
   var t0=null,dur=850;
   function step(t){ if(!t0)t0=t; var p=Math.min((t-t0)/dur,1);
-    el.textContent=fmt(v*(1-Math.pow(1-p,4))); if(p<1) requestAnimationFrame(step); }
+    el.textContent=fmtM(v*(1-Math.pow(1-p,4))); if(p<1) requestAnimationFrame(step); }
   requestAnimationFrame(step);
 }
 function renderHero(anim){
@@ -644,13 +690,24 @@ function renderHero(anim){
             countUp(document.getElementById('outV'),c.gas); }
   else { [['bal',c.disp],['inV',c.ing],['outV',c.gas]].forEach(function(p){
     var e=document.getElementById(p[0]); e.dataset.v=p[1];
-    e.textContent = oculto?'••••••':fmt(p[1]); }); }
-  document.getElementById('patV').textContent=fmt(c.pat);
-  document.getElementById('dispV').textContent=fmt(c.disp);
-  document.getElementById('invV').textContent=fmt(c.inv);
+    e.textContent = oculto?'••••••':fmtM(p[1]); }); }
+  document.getElementById('patV').textContent=fmtM(c.pat);
+  document.getElementById('dispV').textContent=fmtM(c.disp);
+  document.getElementById('invV').textContent=fmtM(c.inv);
+  ['curTxt','curTxt2'].forEach(function(id){ var e=document.getElementById(id); if(e) e.textContent=MON; });
   document.getElementById('movTot').textContent=fmt(c.gas);
   document.getElementById('movL').textContent='Gastado en '+MESN[HOY.getMonth()];
   document.getElementById('movN').textContent=c.mes.length+' movimientos';
+}
+
+/* Cambia la moneda del saldo grande. Los movimientos y gráficos se quedan en pesos. */
+function ciclarMoneda(){
+  var i=MONS.indexOf(MON);
+  MON=MONS[(i+1)%MONS.length];
+  try{ localStorage.setItem('chauchera.moneda',MON); }catch(e){}
+  renderHero(false); vib(10);
+  if(MON!=='CLP') aviso('En '+MON+' al cambio de hoy · '+
+    Math.round(RATES[MON]).toLocaleString('es-CL')+' pesos por '+(MON==='USD'?'dólar':'euro'));
 }
 
 /* ===================== render: resumen ===================== */
@@ -779,7 +836,7 @@ function fila(t){
   var nat = (t.moneda && t.moneda!=='CLP' && t.monto_orig!=null)
     ? (DIV[t.moneda]||'')+Number(t.monto_orig).toLocaleString('es-CL',{maximumFractionDigits:2})
     : fmt(t.monto);
-  return '<div class="row"><div class="ic" style="background:var(--t-'+s+');color:var(--c-'+s+')">'+ico(cat)+'</div>'+
+  return '<div class="row tap" data-id="'+t.id+'"><div class="ic" style="background:var(--t-'+s+');color:var(--c-'+s+')">'+ico(cat)+'</div>'+
     '<div class="rb"><div class="rt">'+esc(t.descripcion)+(t._pend?'<span class="pend"></span>':'')+'</div>'+
     '<div class="rs">'+esc(cat)+' · '+esc(t.cuenta||'—')+'</div></div>'+
     '<div class="ra'+(pos?' pos':'')+' num">'+(pos?'+':'−')+nat+'</div></div>';
@@ -934,9 +991,41 @@ function tasas(){
 /* ===================== cola offline ===================== */
 var OPS={
   insertTx:function(d){ return sb.from('transacciones').insert([d.fila]).select().single(); },
+  updateTx:function(d){ return sb.from('transacciones').update(d.fila).eq('id',d.id).select().single(); },
+  deleteTx:function(d){ return sb.from('transacciones').delete().eq('id',d.id); },
   setSaldo:function(d){ return sb.from('cuentas').update({saldo:d.saldo,updated_at:d.at}).eq('nombre',d.nombre); }
 };
 function hayRed(){ return navigator.onLine!==false; }
+/* Cuánto movió el saldo de su cuenta, en la moneda de esa cuenta.
+   Las transferencias no tocan saldo: solo se registra una pata. */
+function efecto(t){
+  if(!t || !esReal(t)) return 0;
+  var cur=accCur(t.cuenta);
+  var nat=(cur!=='CLP' && t.monto_orig!=null) ? Number(t.monto_orig) : Number(t.monto);
+  return (t.tipo==='income'?1:-1)*nat;
+}
+/* Al editar, el saldo se corrige de una sola vez: si mandáramos el "deshacer"
+   y el "aplicar" por separado, las dos escrituras corren la carrera y puede
+   quedar guardada la equivocada. */
+function reasignarSaldo(viejo,nuevo){
+  var dv=efecto(viejo), dn=efecto(nuevo);
+  if(viejo.cuenta===nuevo.cuenta) aplicaSaldo(viejo.cuenta, dn-dv);
+  else { aplicaSaldo(viejo.cuenta, -dv); aplicaSaldo(nuevo.cuenta, dn); }
+}
+function aplicaSaldo(nombre,delta){
+  if(!nombre || !delta) return;
+  var c=CUENTAS.find(function(x){ return x.nombre===nombre; });
+  if(!c) return;
+  c.saldo=Number(c.saldo)+delta;
+  c.updated_at=new Date().toISOString();
+  escribir('setSaldo',{nombre:nombre,saldo:c.saldo,at:c.updated_at});
+}
+/* Si el movimiento todavía no llegó al servidor, se edita/borra en la cola
+   en vez de mandar un UPDATE contra un id que allá no existe. */
+function enCola(id){
+  for(var i=0;i<COLA.length;i++) if(COLA[i].op==='insertTx' && COLA[i].tmp===id) return i;
+  return -1;
+}
 function encolar(op,d){ COLA.push({op:op,datos:d,tmp:d.tmp,ts:Date.now()}); lsSet(LS_Q,COLA); pintaCola(); }
 function escribir(op,d){
   if(hayRed() && !COLA.length && sb){
@@ -1024,12 +1113,41 @@ var sheet=document.getElementById('sheet'), shBg=document.getElementById('shBg')
 var amtEl=document.getElementById('amt'), amtH=document.getElementById('amtH');
 var buf='', tipo='expense', cat=CATS[0], cuenta='Falabella';
 function pinta(){
-  amtEl.textContent = buf ? '$'+(+buf).toLocaleString('es-CL') : '$0';
+  var sim=DIV[accCur(cuenta)]||'$';
+  amtEl.textContent = buf ? sim+(+buf).toLocaleString('es-CL') : sim+'0';
   amtEl.style.color = buf ? (tipo==='income'?'var(--in)':'var(--ink)') : 'var(--ink-3)';
   amtH.textContent = cuenta+' · '+cat + (accCur(cuenta)!=='CLP'?(' · en '+accCur(cuenta)):'');
   amtEl.classList.add('bump'); setTimeout(function(){ amtEl.classList.remove('bump'); },140);
 }
-function abrir(){
+var editando=null;
+function hoyISO(){ var d=new Date(); return new Date(d.getTime()-d.getTimezoneOffset()*60000).toISOString().slice(0,10); }
+function abrir(id){
+  editando=null;
+  if(id!=null){
+    editando = TXS.find(function(t){ return t.id===id; }) || null;
+    /* Si justo se sincronizó, la fila en pantalla puede apuntar a un id que ya
+       cambió. Antes que abrir un "nuevo" por error y duplicar, se avisa. */
+    if(!editando){ aviso('Ese movimiento acaba de sincronizarse. Tócalo de nuevo.');
+      renderAll(false); return; }
+  }
+  if(editando){
+    var cur=accCur(editando.cuenta);
+    var nat=(cur!=='CLP' && editando.monto_orig!=null) ? Number(editando.monto_orig) : Number(editando.monto);
+    buf   = String(Math.round(nat));
+    tipo  = editando.tipo||'expense';
+    cat   = editando.categoria||CATS[0];
+    cuenta= editando.cuenta||cuenta;
+    document.getElementById('shDesc').value = editando.descripcion||'';
+    document.getElementById('shFecha').value = (editando.fecha||'').slice(0,10);
+  } else {
+    buf=''; tipo='expense';
+    document.getElementById('shDesc').value='';
+    document.getElementById('shFecha').value=hoyISO();
+  }
+  document.getElementById('shTit').textContent = editando?'Editar movimiento':'Nuevo movimiento';
+  document.getElementById('save').textContent  = editando?'Guardar cambios':'Guardar';
+  document.getElementById('borrar').hidden     = !editando;
+  document.querySelectorAll('.tt-b').forEach(function(x){ x.classList.toggle('on', x.dataset.t===tipo); });
   document.getElementById('shAcc').innerHTML=Object.keys(ACC).filter(function(n){ return !ACC[n].liab||true; })
     .map(function(n){ return '<option'+(n===cuenta?' selected':'')+'>'+esc(n)+'</option>'; }).join('');
   document.getElementById('cats').innerHTML=CATS.map(function(c,i){
@@ -1046,9 +1164,16 @@ function abrir(){
   document.getElementById('shAcc').addEventListener('change',function(e){ cuenta=e.target.value; pinta(); });
   pinta(); shBg.classList.add('on'); sheet.classList.add('on'); vib(12);
 }
-function cerrar(){ shBg.classList.remove('on'); sheet.classList.remove('on'); sheet.style.transform=''; }
-document.getElementById('addBtn').addEventListener('click',abrir);
-document.getElementById('addBtn2').addEventListener('click',abrir);
+function cerrar(){
+  shBg.classList.remove('on'); sheet.classList.remove('on'); sheet.style.transform='';
+  editando=null;
+  if(window.__desarmarBorrar) window.__desarmarBorrar();
+}
+['curBtn','curBtn2','bal','patV'].forEach(function(id){
+  var e=document.getElementById(id); if(e){ e.style.cursor='pointer'; e.addEventListener('click',ciclarMoneda); }
+});
+document.getElementById('addBtn').addEventListener('click',function(){ abrir(null); });
+document.getElementById('addBtn2').addEventListener('click',function(){ abrir(null); });
 shBg.addEventListener('click',cerrar);
 document.getElementById('pad').addEventListener('click',function(e){
   var b=e.target.closest('.key'); if(!b) return;
@@ -1074,25 +1199,74 @@ document.getElementById('save').addEventListener('click',function(){
     aviso(!buf?'Falta el monto':'Falta la descripción'); return;
   }
   var monto=+buf, cur=accCur(cuenta), montoCLP=Math.round(monto*(RATES[cur]||1));
-  var fila={fecha:new Date().toISOString().slice(0,10),descripcion:desc,categoria:cat,cuenta:cuenta,
+  var fila={fecha:document.getElementById('shFecha').value||hoyISO(),
+            descripcion:desc,categoria:cat,cuenta:cuenta,
             monto:montoCLP,monto_orig:monto,moneda:cur,tipo:tipo,fija:false};
+
+  if(editando){
+    var viejo=editando, id=viejo.id, q=enCola(id);
+    var nuevo=Object.assign({},viejo,fila);
+    var i=TXS.findIndex(function(t){ return t.id===id; });
+    if(i>-1) TXS[i]=nuevo;
+    reasignarSaldo(viejo,nuevo);
+    TXS.sort(function(a,b){ return (a.fecha<b.fecha?1:a.fecha>b.fecha?-1:(b.id-a.id)); });
+    if(q>-1){
+      /* todavía no se sube: se corrige el payload que está en la cola */
+      COLA[q].datos.fila=fila; lsSet(LS_Q,COLA);
+      renderAll(false); cerrar(); vib(16);
+      aviso('✓ Corregido · se sube al volver la señal');
+    } else {
+      escribir('updateTx',{id:id,fila:fila}).then(function(r){
+        renderAll(false); cerrar(); vib(16);
+        aviso(r.encolado?'✓ Corregido · se sube al volver la señal':'✓ Movimiento actualizado');
+      });
+      renderAll(false); cerrar();
+    }
+    editando=null; buf=''; return;
+  }
+
   var tmp=proxTmp--;
   escribir('insertTx',{fila:fila,tmp:tmp}).then(function(r){
     var d = r.ok ? r.data : Object.assign({id:tmp,_pend:true},fila);
     TXS.unshift(d);
-    if(esReal(d)){
-      var c=CUENTAS.find(function(x){ return x.nombre===cuenta; });
-      if(c){
-        var nat = (cur!=='CLP') ? monto : montoCLP;
-        c.saldo = Number(c.saldo) + (tipo==='income'?1:-1)*nat;
-        c.updated_at = new Date().toISOString();
-        escribir('setSaldo',{nombre:cuenta,saldo:c.saldo,at:c.updated_at});
-      }
-    }
+    TXS.sort(function(a,b){ return (a.fecha<b.fecha?1:a.fecha>b.fecha?-1:(b.id-a.id)); });
+    aplicaSaldo(cuenta, efecto(d));
     buf=''; document.getElementById('shDesc').value='';
     renderAll(false); cerrar(); vib(16);
     aviso(r.encolado ? '✓ Guardado · se sube al volver la señal'
                      : ((tipo==='income'?'✓ Ingreso ':'✓ Gasto ')+fmt(montoCLP)+' guardado'));
+  });
+});
+
+/* borrar: pide confirmación en el mismo botón, sin diálogo del navegador */
+(function(){
+  var b=document.getElementById('borrar'), armado=false, t=null;
+  function desarmar(){ armado=false; b.classList.remove('arm'); b.textContent='Borrar movimiento'; }
+  b.addEventListener('click',function(){
+    if(!editando) return;
+    if(!armado){ armado=true; b.classList.add('arm'); b.textContent='Tocar de nuevo para borrar';
+      vib(10); clearTimeout(t); t=setTimeout(desarmar,3500); return; }
+    clearTimeout(t); desarmar();
+    var t0=editando, id=t0.id, q=enCola(id);
+    aplicaSaldo(t0.cuenta, -efecto(t0));
+    var i=TXS.findIndex(function(x){ return x.id===id; });
+    if(i>-1) TXS.splice(i,1);
+    if(q>-1){ COLA.splice(q,1); lsSet(LS_Q,COLA); pintaCola(); }
+    else escribir('deleteTx',{id:id});
+    editando=null; buf='';
+    renderAll(false); cerrar(); vib([14,50,14]);
+    aviso('Movimiento borrado');
+  });
+  window.__desarmarBorrar=desarmar;
+})();
+
+/* tocar cualquier movimiento lo abre para editar */
+['movHome','movList'].forEach(function(id){
+  var c=document.getElementById(id); if(!c) return;
+  c.addEventListener('click',function(e){
+    var r=e.target.closest('.row[data-id]'); if(!r) return;
+    var n=Number(r.dataset.id); if(isNaN(n)) return;
+    vib(8); abrir(n);
   });
 });
 (function(){
